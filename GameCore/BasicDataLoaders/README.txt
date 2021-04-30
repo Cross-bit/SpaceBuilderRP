@@ -1,0 +1,1 @@
+﻿Základní data při loadu světa... Hlavní Manager všeho, který musí vždy existovat!!!

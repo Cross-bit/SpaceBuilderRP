@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Assets.Scripts.GameCore.PeopleSystems.PersonCreation
+{
+    public class PersonCreator
+    {
+        private IPersonCreator _personCreator;
+
+        public PersonCreator(IPersonCreator personCreator)
+        {
+            _personCreator = personCreator;
+        }
+
+        public void CreatePerson() {
+            _personCreator.CreatePerson();
+        }
+
+    }
+}
