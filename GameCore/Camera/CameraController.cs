@@ -66,13 +66,13 @@ namespace RTS_Cam
         public bool autoHeight = true;
         public LayerMask groundMask = -1; //layermask of ground or other objects that affect height
 
-        public float maxHeight = 10f; //maximal height
-        public float minHeight = 15f; //minimnal height
+        public float maxHeight = 15f; //maximal height
+        public float minHeight = -15f; //minimnal height
         public float heightDampening = 5f;
         public float keyboardZoomingSensitivity = 2f;
         public float scrollWheelZoomingSensitivity = 25f;
 
-        private float zoomPos = 0; //value in range (0, 1) used as t in Matf.Lerp
+        private float zoomPos = 1f; //value in range (0, 1) used as t in Matf.Lerp
 
         #endregion
 
@@ -323,13 +323,14 @@ namespace RTS_Cam
             // Lerp pozice při scrollu
             m_Transform.position = Vector3.Lerp(m_Transform.position,
                 new Vector3(m_Transform.position.x, targetHeight + difference, m_Transform.position.z), Time.deltaTime * heightDampening);
+
             /*   }
                else
                {
 
                    //  m_Transform.LookAt(targetFollow);
                    Vector3 targetPos = new Vector3(targetFollow.position.x, m_Transform.position.y, targetFollow.position.z) + targetOffset/*+ Vector3.Scale(targetOffset, Settings.GetVector3Population_(m_Transform.position));*/
-            
+
 
             /*       m_Transform.position = Vector3.Lerp(m_Transform.position,
                       targetPos, zoomPos * targetZoomSpeed);
