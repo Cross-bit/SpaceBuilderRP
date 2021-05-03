@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using System.Linq;
 
-
+#if UNITY_EDITOR
 public class VerticalBlock : IDisposable
 {
     public VerticalBlock(params GUILayoutOption[] options)
@@ -106,3 +108,4 @@ public class TabsBlock
         currentGuiMethod = methods[methods.Keys.ToArray()[index]];
     }
 }
+#endif
