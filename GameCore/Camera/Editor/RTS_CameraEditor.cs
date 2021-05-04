@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+#if UNITY_EDITOR 
 using UnityEditor;
+#endif
 
 namespace RTS_Cam
 {
+#if UNITY_EDITOR
     [CustomEditor(typeof(CameraController))]
     public class RTS_CameraEditor : Editor
     {
@@ -191,4 +194,5 @@ namespace RTS_Cam
             }  
         }
     }
+#endif 
 }
