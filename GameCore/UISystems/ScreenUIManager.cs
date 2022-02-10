@@ -14,7 +14,7 @@ public class ScreenUIManager : Singleton<ScreenUIManager>
 
     [Header("Build window")]
     public BuildLibraryWindow buildLibraryWindow;
-    public List<BlockBuildCart> allBuildCarts = new List<BlockBuildCart>();
+    public List<BlockBuildCard> allBuildCards = new List<BlockBuildCard>();
     public RectTransform timersHolder;
     public RectTransform simpleMessageHolder;
 

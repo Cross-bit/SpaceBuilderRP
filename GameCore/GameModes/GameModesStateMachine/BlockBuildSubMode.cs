@@ -12,6 +12,8 @@ namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
 
         GameModesSM _stm;
 
+        BuildSubModePlace _placeMode;
+
         public BlockBuildSubMode(GameModesSM stateMachine) : base (stateMachine) {
             _stm = stateMachine;
         }
@@ -20,21 +22,32 @@ namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
 
             base.Enter();
 
-            var placeMode = new BuildSubModePlace(_stm.LastActiveChecker, World.Instance.SpaceStation);
-            GameModesManager.Instance.subModesHandler.SetSubMode(placeMode);
-            GameModesManager.Instance.subModesHandler.TurnModeOn();
+            if (_stm.LastActiveChecker == null)
+                Exit();
 
-            _stm.LastActiveChecker = placeMode.NextChecker;
+            _placeMode = new BuildSubModePlace(_stm.LastActiveChecker, World.Instance.SpaceStation);
+            _placeMode.TurnModeOn();
 
-            InputManager.Instance.PlayerActionInputs.PlayerInteracted += OnPlayerAction;
+            ScreenUIManager.Instance.allBuildCards?.ForEach(card => {
+                card.ClickedCard += PlayerClickedCard;
+            });
+
+            InputManager.Instance.PlayerActionInputs.PlayerInteracted += PlayerInteracted;
         }
 
-        protected override void OnPlayerAction(object interactionControls, EventArgs args) {
+        private void PlayerClickedCard(object sender, EventArgs e) {
+            var cardData = (BlockCardEventArgs)e;
+
+            _placeMode?.PlaceBlock(cardData.BlockType);
+        }
+
+
+        protected override void PlayerInteracted(object interactionControls, EventArgs e) {
             
-            var actionData = (InteractionData)args;
+            var actionData = (InteractionEventArgs)e;
 
             switch (actionData.ActionPerformed) {
-                case InteractionData.ActionType.CANCLE_ACTION:
+                case InteractionEventArgs.ActionType.CANCLE_ACTION:
                     _stm.SetNewState(_stm.BuildState);
                 break;
             }
@@ -44,9 +57,13 @@ namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
 
             base.Exit();
 
-            GameModesManager.Instance.subModesHandler.StopCurrentSubMode(typeof(BuildSubModePlace));
+            _placeMode.TurnModeOff();
 
-            InputManager.Instance.PlayerActionInputs.PlayerInteracted -= OnPlayerAction;
+            ScreenUIManager.Instance.allBuildCards?.ForEach(card => {
+                card.ClickedCard -= PlayerClickedCard;
+            });
+
+            InputManager.Instance.PlayerActionInputs.PlayerInteracted -= PlayerInteracted;
 
         }
 

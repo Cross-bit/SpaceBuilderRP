@@ -11,51 +11,39 @@ public class World : Singleton<World>
 {
         // Nastavení světa
         public SpaceStation SpaceStation { get; private set; }
-        
+
         void Start() {
-            // loads block library 
-            foreach (var blockData in Resources.LoadAll<BlockSO>(Settings.BLOCKSO_PATH)) {
-                Settings.blocksTypeLibrary.Add(blockData.blockType, blockData);
-                UI.suitableBlocksOrganised.Add(blockData);
-            }
 
+            InitBlockLibrary();
 
-            // Pokud se jedná o komplet nový svět:
-            if (Manager.Instance.isNewWorld) {
-                Settings.defaultWorldPosition = this.transform.position;
-                var seed = Mathf.Abs("seed".GetHashCode()).ToString();
-                SpaceStation = new SpaceStation(seed);
-                SpaceStation.CreateNewSpaceStation();
-            }
-            else {
-                // Load todo:
-            }
+            LoadWorldData();
 
             // Load zbylých proměnných
             Settings.largestSymConstant = Helpers.GetLargestSymConstantValue();
 
+    }
+
+    private void LoadWorldData() {
+
+        if (Manager.Instance.isNewWorld) {
+            // crate new space station
+            Settings.defaultWorldPosition = this.transform.position;
+            var seed = Mathf.Abs("seed".GetHashCode()).ToString();
+            SpaceStation = new SpaceStation(seed);
+            SpaceStation.CreateNewSpaceStation();
         }
-    
-        // BUILDMODE
-        public void PlaceBlockInWorld(Settings.Blocks_types blockType) {
-            var subMode = GameModesManager.Instance.subModesHandler.CurrentSubMode as BuildSubModePlace;
-            subMode.PlaceBlock(blockType);
+        else {
+            // Load from disk todo:
         }
-        
-        /*public void TurnBuildModeOn(BlockChecker controllerToBuildOn = null) {
+    }
 
-            GameModesManagerNew.Instance.CurrentGameState.TurnOnBuildMode();
 
-            if (controllerToBuildOn != null) {
-                var placeMode = new BuildSubModePlace(controllerToBuildOn, SpaceStation);
-                GameModesManager.Instance.subModesHandler.SetSubMode(placeMode);
-                GameModesManager.Instance.subModesHandler.TurnModeOn();
-            }
-        }*/
+    private void InitBlockLibrary() {
+        // loads block library 
+        foreach (var blockData in Resources.LoadAll<BlockSO>(Settings.BLOCKSO_PATH)) {
+            Settings.blocksTypeLibrary.Add(blockData.blockType, blockData);
+            UI.suitableBlocksOrganised.Add(blockData);
+        }
+    }
 
-        // turn build mode and submodes
-        /*public void TurnBuildModeOff() {
-            GameModesManager.Instance.subModesHandler.StopCurrentSubMode(typeof(BuildSubModePlace));
-            GameModesManagerNew.Instance.CurrentGameState.TurnOnIndleMode();
-        }*/
 }

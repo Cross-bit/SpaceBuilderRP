@@ -29,21 +29,25 @@ namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
 
         protected virtual void OnPlayerWorldInteraction(object interactionControls, EventArgs args) {
 
-            var actionData = (InteractionData)args;
+            var actionData = (InteractionEventArgs)args;
 
             switch (actionData.ActionPerformed) {
-                case InteractionData.ActionType.MOUSE_L_ACTION:
+                case InteractionEventArgs.ActionType.MOUSE_L_ACTION:
 
                     var interaction = new PlayerInteractionsHandler();
+
+                    if (interaction.HitData.transform == null)
+                        return;
+                    
 
                     if (interaction.HitData.transform.gameObject.layer == LayerMask.NameToLayer(Settings.CHECKER_LAYER)) {
                         SetLastActiveChecker(interaction.HitData);
                         _stm.SetNewState(_stm.BlockBuildSubState);
                     }
 
-                    else if (interaction.HitData.transform.gameObject.layer == LayerMask.NameToLayer(Settings.BLOCK_LAYER)) {
+                    /*else if (interaction.HitData.transform.gameObject.layer == LayerMask.NameToLayer(Settings.BLOCK_LAYER)) {
                         SetLastActiveBlock(interaction.HitData); // todo: show window etc.
-                    }
+                    }*/
 
                     break;
             }

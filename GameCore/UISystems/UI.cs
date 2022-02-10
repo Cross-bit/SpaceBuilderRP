@@ -36,8 +36,9 @@ public static class UI
                 // Nastavíme název okna
                 ScreenUIManager.Instance.buildLibraryWindow.title.text = TextHolder.BUILD_LIBRARY_NAME.ToUpper();
                 // Nastavíme tlačítko okna
-                PrepareButton(ScreenUIManager.Instance.buildLibraryWindow.closeBtn);
-                ScreenUIManager.Instance.buildLibraryWindow.closeBtn.onClick.AddListener(() => GameModesManager.Instance.subModesHandler.StopCurrentSubMode(typeof(BuildSubModePlace)));
+                 //TODO:
+                /*PrepareButton(ScreenUIManager.Instance.buildLibraryWindow.closeBtn);
+                ScreenUIManager.Instance.buildLibraryWindow.closeBtn.onClick.AddListener(() => GameModesManager.Instance.subModesHandler.StopCurrentSubMode(typeof(BuildSubModePlace)));*/
 
                 // -- UI KARTY --
 
@@ -50,65 +51,60 @@ public static class UI
                         Debug.Log("Bylo změněno z : " + LastUsedType + " na " + c_type);
                         LastUsedType = c_type; // Tak zapiš jaká byla.*/
 
-                        foreach (BlockBuildCart b_cart in ScreenUIManager.Instance.allBuildCarts)
+                        foreach (BlockBuildCard b_card in ScreenUIManager.Instance.allBuildCards)
                         {
-                            b_cart.CartGraphics.gameObject.SetActive(true);
+                            b_card.CartGraphics.gameObject.SetActive(true);
 
                             // Vymažeme všechny listenery tlačítka
-                            Button cart_btn = b_cart.CartGraphics.GetComponent<Button>();
+                            Button cart_btn = b_card.CartGraphics.GetComponent<Button>();
                             PrepareButton(cart_btn);
 
                         }
 
                         // Nejdřív zjistíme jestli počet již načtených shoduje/je větší s počtem kolik potřebujeme načíst
-                        bool isLenghtSame = ScreenUIManager.Instance.allBuildCarts.Count >= suitableBlocks.Count ? true : false;
+                        bool isLenghtSame = ScreenUIManager.Instance.allBuildCards.Count >= suitableBlocks.Count ? true : false;
 
                         // Pokud jsou délky stejné (poptávka == nabídka)
                         if (isLenghtSame)
                         {
                             short ctr = 0;
-                            foreach (BlockBuildCart b_cart in ScreenUIManager.Instance.allBuildCarts)
+                            foreach (BlockBuildCard b_card in ScreenUIManager.Instance.allBuildCards)
                             {
                                 // Kolik Karet skutečně potřebujeme??
                                 if (ctr < (short)suitableBlocks.Count)
                                 {
-                                    /*BlockBuildCart standart_cart = null;
-                                    if (suitableBlocks[ctr] != LastUsedtype)
-                                    {
-                                        standart_cart = b_cart;
-                                    }*/
+
                                     // PŘEPÍŠEME KARTY
 
                                     // Získáme text karty
-                                    TextMeshProUGUI cart_name = b_cart.CartGraphics.GetComponentInChildren<TextMeshProUGUI>();
+                                    TextMeshProUGUI card_name = b_card.CartGraphics.GetComponentInChildren<TextMeshProUGUI>();
 
                                     // Přepíšeme
-                                    cart_name.text = suitableBlocks[ctr].block_name;
+                                    card_name.text = suitableBlocks[ctr].block_name;
 
                                     // Získáme obrázek karty
-                                    Image cart_img = Settings.FindComponentInChildrenWithTag<Image>(b_cart.CartGraphics.transform, "IMAGE");
+                                    Image card_img = Settings.FindComponentInChildrenWithTag<Image>(b_card.CartGraphics.transform, "IMAGE");
       
                                     // Změníme obrázek
-                                    cart_img.sprite = suitableBlocks[ctr].UIprew;
+                                    card_img.sprite = suitableBlocks[ctr].UIprew;
 
                                     // Změníme typ bloku
-                                    b_cart.BlockType = suitableBlocks[ctr].blockType;
+                                    b_card.BlockType = suitableBlocks[ctr].blockType;
 
                                     // POŠLEME DATA PRO BUILD LIBRARY
-                                    b_cart.BlockData = suitableBlocks[ctr];
-                                    b_cart.CheckerType = c_type;
+                                    b_card.BlockData = suitableBlocks[ctr];
+                                    b_card.CheckerType = c_type;
 
                                     // Přidáme click funkci tlačítku
-                                    Button cart_btn = b_cart.CartGraphics.GetComponent<Button>();
+                                    Button card_btn = b_card.CartGraphics.GetComponent<Button>();
 
-                                    
-                                    cart_btn.onClick.AddListener(() => World.Instance.PlaceBlockInWorld(b_cart.BlockType));
-                                    cart_btn.onClick.AddListener(() => Helpers.ReorganiseSuitableBlocks(b_cart.BlockData));
+                                    card_btn.onClick.AddListener(() => b_card.CardClicked());
+                                    card_btn.onClick.AddListener(() => Helpers.ReorganiseSuitableBlocks(b_card.BlockData));
                                     
                                 }
                                 else
                                 {
-                                    b_cart.CartGraphics.gameObject.SetActive(false);
+                                    b_card.CartGraphics.gameObject.SetActive(false);
                                 }
 
                                 ctr++;
@@ -119,8 +115,8 @@ public static class UI
                              // že se vygeneruje nejvyšší možný počet hned na začátku a tohle už nebudemem muset řešit, ale pořád je tohle nejvíce optimalizovaná možnost
                         {
                             // Kolik Karet je tedy potřeba dodat abs((co potřebujeme) - (to co máme))
-                            short cartsToAdd = (short)(suitableBlocks.Count - ScreenUIManager.Instance.allBuildCarts.Count);
-                            for (short i = 0; i < cartsToAdd; i++)
+                            short cardsToAdd = (short)(suitableBlocks.Count - ScreenUIManager.Instance.allBuildCards.Count);
+                            for (short i = 0; i < cardsToAdd; i++)
                             {
                                 if (block_ui_prew != null)
                                 {
@@ -128,7 +124,7 @@ public static class UI
                                     new_ui_element.transform.SetParent(ScreenUIManager.Instance.buildLibraryWindow.buildLibraryBlockContainer.transform);
                                     new_ui_element.GetComponent<Transform>().localScale = new Vector3(1, 1, 1);
 
-                                    ScreenUIManager.Instance.allBuildCarts.Add(new BlockBuildCart(new_ui_element.transform as RectTransform));
+                                    ScreenUIManager.Instance.allBuildCards.Add(new BlockBuildCard(new_ui_element.transform as RectTransform));
                                 }
                                 else
                                 {
@@ -141,23 +137,23 @@ public static class UI
 
                             // Pro ověření si znovu načteme všechny karty a znovu checkneme délky 
                             //all_block_carts = Settings.FindComponentsInChildrenWithTag<RectTransform>(ScreenUIHolder.Instance.buildLibraryBlockContainer, Settings.UI_TAG_BLOCK_CART);
-                            isLenghtSame = ScreenUIManager.Instance.allBuildCarts.Count >= suitableBlocks.Count ? true : false;
+                            isLenghtSame = ScreenUIManager.Instance.allBuildCards.Count >= suitableBlocks.Count ? true : false;
 
                             // Pokud je vše ok, tak přepisujeme:
                             if (isLenghtSame) {
                                 // Prostě projíždíme všechny karty, které vůbec existují(buď byly dodtaečně vytvořeny, nebo...)
                                 short ctr = 0; // => žádné omezení ctr
-                                foreach (BlockBuildCart b_cart in ScreenUIManager.Instance.allBuildCarts)
+                                foreach (BlockBuildCard b_card in ScreenUIManager.Instance.allBuildCards)
                                 {
                                     // PŘEPÍŠEME KARTY
 
                                     // Získáme text karty
-                                    TextMeshProUGUI cart_name = b_cart.CartGraphics.GetComponentInChildren<TextMeshProUGUI>();
+                                    TextMeshProUGUI card_name = b_card.CartGraphics.GetComponentInChildren<TextMeshProUGUI>();
                                     // Přepíšeme
-                                    cart_name.text = suitableBlocks[ctr].block_name;
+                                    card_name.text = suitableBlocks[ctr].block_name;
 
                                     // Získáme obrázek karty
-                                    Image cart_img = Settings.FindComponentInChildrenWithTag<Image>(b_cart.CartGraphics.transform, "IMAGE");
+                                    Image cart_img = Settings.FindComponentInChildrenWithTag<Image>(b_card.CartGraphics.transform, "IMAGE");
                                     if(cart_img == null)
                                         Debug.LogError("Nebyl nalezen komponent v childs!");
 
@@ -165,19 +161,19 @@ public static class UI
                                 if (cart_img != null)
                                         cart_img.sprite = suitableBlocks[ctr].UIprew;
 
-                                    b_cart.BlockType = suitableBlocks[ctr].blockType;
-                                    Button cart_btn = b_cart.CartGraphics.GetComponent<Button>();
+                                    b_card.BlockType = suitableBlocks[ctr].blockType;
+                                    Button card_btn = b_card.CartGraphics.GetComponent<Button>();
 
                                     // POŠLEME DATA PRO BUILD LIBRARY
-                                    b_cart.BlockData = suitableBlocks[ctr];
-                                    b_cart.CheckerType = c_type;
+                                    b_card.BlockData = suitableBlocks[ctr];
+                                    b_card.CheckerType = c_type;
 
                                     // Přidáme click funkci
-                                    cart_btn.onClick.AddListener(() => World.Instance.PlaceBlockInWorld(b_cart.BlockType));
-                                    cart_btn.onClick.AddListener(() => Helpers.ReorganiseSuitableBlocks(b_cart.BlockData));
+                                    card_btn.onClick.AddListener(() => b_card.CardClicked());
+                                    card_btn.onClick.AddListener(() => Helpers.ReorganiseSuitableBlocks(b_card.BlockData));
 
                                     //Přidáme zvuk
-                                    AddButtonSound(cart_btn);
+                                    AddButtonSound(card_btn);
 
                                     ctr++;
                                 }
@@ -277,8 +273,9 @@ public static class UI
             PrepareButton(ScreenUIManager.Instance.gizmos.rotateRBtn); // V PRAVO
 
             BuildSubModePlace buildSubMode = null;
-            if (GameModesManager.Instance.subModesHandler.CurrentSubMode is BuildSubModePlace)
-                buildSubMode = GameModesManager.Instance.subModesHandler.CurrentSubMode as BuildSubModePlace;
+
+            /*if (GameModesManager.Instance.subModesHandler.CurrentSubMode is BuildSubModePlace) TODO:
+                buildSubMode = GameModesManager.Instance.subModesHandler.CurrentSubMode as BuildSubModePlace;*/
 
             if (buildSubMode != null) {
                 ScreenUIManager.Instance.gizmos.rotateLBtn.onClick.AddListener( 

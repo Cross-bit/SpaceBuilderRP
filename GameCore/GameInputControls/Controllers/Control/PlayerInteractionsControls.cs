@@ -23,7 +23,7 @@ namespace Assets.Scripts.GameCore.GameControls.Controllers
 
 
             if (ctx.ReadValue<float>() > .25f) {
-                PlayerInteracted?.Invoke(this, new InteractionData(InteractionData.ActionType.MOUSE_L_ACTION));
+                PlayerInteracted?.Invoke(this, new InteractionEventArgs(InteractionEventArgs.ActionType.MOUSE_L_ACTION));
 
                 /*var worldInteractionHandler = new InteractionsHandlersController();
                 if (worldInteractionHandler.IsInteractionValid)
@@ -33,17 +33,17 @@ namespace Assets.Scripts.GameCore.GameControls.Controllers
 
         private void CallTerminateBuild(Context ctx) {
             if (ctx.ReadValue<float>() > .25f)
-                PlayerInteracted?.Invoke(this, new InteractionData(InteractionData.ActionType.CANCLE_ACTION));
+                PlayerInteracted?.Invoke(this, new InteractionEventArgs(InteractionEventArgs.ActionType.CANCLE_ACTION));
                 //BuildController.Instance.TurnBuildModeOff();
         }
     }
 
-    public class InteractionData : EventArgs {
+    public class InteractionEventArgs : EventArgs {
         public enum ActionType { CANCLE_ACTION, MOUSE_L_ACTION }
 
         public readonly ActionType ActionPerformed;
 
-        public InteractionData(ActionType interactionType) {
+        public InteractionEventArgs(ActionType interactionType) {
             ActionPerformed = interactionType;
         }
     }

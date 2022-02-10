@@ -25,7 +25,7 @@ namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
             BlockLibrary.blocksLib.ForEach(b => b.BlockGrid?.SetGridActive(true));
             UI.BuildModeElementsState(true);
 
-            InputManager.Instance.PlayerActionInputs.PlayerInteracted += OnPlayerAction;
+            InputManager.Instance.PlayerActionInputs.PlayerInteracted += PlayerInteracted;
         }
 
         public override void Exit() {
@@ -39,15 +39,15 @@ namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
             GizmosInGame.GridState(false);
             BlockLibrary.blocksLib.ForEach(b => b.BlockGrid?.SetGridActive(false));
 
-            InputManager.Instance.PlayerActionInputs.PlayerInteracted -= OnPlayerAction;
+            InputManager.Instance.PlayerActionInputs.PlayerInteracted -= PlayerInteracted;
         }
 
-        protected virtual void OnPlayerAction(object interactionControls, EventArgs args) {
+        protected virtual void PlayerInteracted(object interactionControls, EventArgs e) {
 
-            var actionData = (InteractionData)args;
+            var actionData = (InteractionEventArgs)e;
 
             switch (actionData.ActionPerformed) {
-                case InteractionData.ActionType.CANCLE_ACTION:
+                case InteractionEventArgs.ActionType.CANCLE_ACTION:
                     _stm.SetNewState(_stm.IdleGameState);
                     break;
             }

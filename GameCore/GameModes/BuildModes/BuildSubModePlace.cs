@@ -106,7 +106,7 @@ namespace Assets.Scripts.GameCore.GameModes
             if (Settings.switchCheckers && LastPlacedBlock.Checkers.Count > 1)
                 SwitchFocusToAnotherChecker();
             else
-                GameModesManager.Instance.subModesHandler.StopCurrentSubMode(typeof(BuildSubModePlace));
+                TurnModeOff();
 
         }
 
