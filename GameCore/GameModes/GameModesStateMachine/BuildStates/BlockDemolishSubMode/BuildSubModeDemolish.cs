@@ -1,7 +1,7 @@
 ﻿using Assets.Scripts.GameCore.WorldBuilding.ModifyWorld;
 namespace Assets.Scripts.GameCore.GameModes
 {
-    public class BuildSubModeDemolish : IGameMode
+    public class BuildSubModeDemolish
     {
         private readonly ModifyWorldActionHandler modifyWorldActionHandler = new ModifyWorldActionHandler();
 

@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
 {
-    public class BaseBuildMode : BaseState {
+    /// <summary> Common base state for all build states. </summary>
+    public class BaseBuildState : BaseState {
 
         GameModesSM _stm;
 
-        public BaseBuildMode(GameModesSM stm) : base(stm) {
+        public BaseBuildState(GameModesSM stm) : base(stm) {
             _stm = stm;
         }
 

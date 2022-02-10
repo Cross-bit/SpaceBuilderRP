@@ -1,15 +1,16 @@
-﻿using Assets.Scripts.GameCore.WorldBuilding.ModifyWorld;
+﻿using Assets.Scripts.GameCore.WorldBuilding.AdditionalForBuild;
+using Assets.Scripts.GameCore.WorldBuilding.ModifyWorld;
 using Assets.Scripts.GameCore.UISystems.AskDialogueWindow;
-using UnityEngine;
 using Assets.Scripts.GameCore.WorldBuilding.BlockLibrary;
-using System;
-using Assets.Scripts.GameCore.WorldBuilding.AdditionalForBuild;
 using Assets.Scripts.GameCore.BuildCoroutines;
+using UnityEngine;
+using System;
 
 namespace Assets.Scripts.GameCore.GameModes
 {
-    public class BuildSubModePlace : IGameMode
-    {
+    public class BlockBuildPlacing {
+
+
         private BlockChecker _checkerToBuildOn; // last active; last clicked on 
         public readonly ModifyWorldActionHandler ModifyWorldActionHandler = new ModifyWorldActionHandler();
         public SymetricBlock LastPlacedBlock;
@@ -20,7 +21,7 @@ namespace Assets.Scripts.GameCore.GameModes
 
         public BlockChecker NextChecker = null;
 
-        public BuildSubModePlace(BlockChecker checkerToBuildOn, SpaceStation spaceStation) {
+        public BlockBuildPlacing(BlockChecker checkerToBuildOn, SpaceStation spaceStation) {
             _checkerToBuildOn = checkerToBuildOn;
             _spaceStation = spaceStation;
         }

@@ -13,9 +13,9 @@ namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
 
         public IdleGameState IdleGameState;
 
-        public BaseBuildMode BuildState; // state grouping together build states
+        public BaseBuildState BuildState; // state grouping together build states
 
-        public BlockBuildSubMode BlockBuildSubState;
+        public BlockBuildSubState BlockBuildSubState;
 
         // other
         public BlockChecker LastActiveChecker { get; set; }
@@ -23,8 +23,8 @@ namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
         
         private void Awake() {
             IdleGameState = new IdleGameState(this);
-            BuildState = new BaseBuildMode(this);
-            BlockBuildSubState = new BlockBuildSubMode(this);
+            BuildState = new BaseBuildState(this);
+            BlockBuildSubState = new BlockBuildSubState(this);
         }
 
         protected override BaseState GetInitialState() {

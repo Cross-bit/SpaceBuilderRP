@@ -8,13 +8,14 @@ using UnityEngine;
 
 namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
 {
-    public class BlockBuildSubMode : BaseBuildMode {
+    /// <summary> Build substate for block placement. </summary>
+    public class BlockBuildSubState : BaseBuildState {
 
         GameModesSM _stm;
 
-        BuildSubModePlace _placeMode;
+        BlockBuildPlacing _placeMode;
 
-        public BlockBuildSubMode(GameModesSM stateMachine) : base (stateMachine) {
+        public BlockBuildSubState(GameModesSM stateMachine) : base (stateMachine) {
             _stm = stateMachine;
         }
 
@@ -25,7 +26,7 @@ namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
             if (_stm.LastActiveChecker == null)
                 Exit();
 
-            _placeMode = new BuildSubModePlace(_stm.LastActiveChecker, World.Instance.SpaceStation);
+            _placeMode = new BlockBuildPlacing(_stm.LastActiveChecker, World.Instance.SpaceStation);
             _placeMode.TurnModeOn();
 
             ScreenUIManager.Instance.allBuildCards?.ForEach(card => {

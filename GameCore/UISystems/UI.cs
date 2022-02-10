@@ -272,7 +272,7 @@ public static class UI
             PrepareButton(ScreenUIManager.Instance.gizmos.rotateLBtn);// V LEVO
             PrepareButton(ScreenUIManager.Instance.gizmos.rotateRBtn); // V PRAVO
 
-            BuildSubModePlace buildSubMode = null;
+            BlockBuildPlacing buildSubMode = null;
 
             /*if (GameModesManager.Instance.subModesHandler.CurrentSubMode is BuildSubModePlace) TODO:
                 buildSubMode = GameModesManager.Instance.subModesHandler.CurrentSubMode as BuildSubModePlace;*/
