@@ -14,14 +14,11 @@ namespace Assets.Scripts.GameCore.UISystems.AskDialogueWindow
         private Vector3 _positionToDraw;
         private AskDialogueWindowController _controller = ScreenUIManager.Instance.AskDialogWindowController;
 
-        private readonly SpaceStationModificator _modifyWorldActionHandler;
-
         public event EventHandler PlayerAccepted;
         public event EventHandler PlayerRejected;
 
 
-        public ADWPlaceModeModul(SpaceStationModificator modifyWorldActionHandler, Vector3 positionToDraw) {
-            _modifyWorldActionHandler = modifyWorldActionHandler;
+        public ADWPlaceModeModul(Vector3 positionToDraw) {
             _positionToDraw = positionToDraw;
         }
 
@@ -43,7 +40,7 @@ namespace Assets.Scripts.GameCore.UISystems.AskDialogueWindow
 
             _controller.PositionToDrawOn = new Vector3(_positionToDraw.x, _positionToDraw.y + Settings.dialogWindowHeight, _positionToDraw.z);
 
-            _controller.AskDialogueContainer.gameObject.SetActive(true); // Zapneme
+            _controller.AskDialogueContainer.gameObject.SetActive(true);
         }
     }
 }

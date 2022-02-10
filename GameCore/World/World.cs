@@ -20,7 +20,6 @@ public class World : Singleton<World>
 
             // Load zbylých proměnných
             Settings.largestSymConstant = Helpers.GetLargestSymConstantValue();
-
     }
 
     private void LoadWorldData() {

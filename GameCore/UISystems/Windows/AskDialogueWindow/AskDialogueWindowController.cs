@@ -7,7 +7,7 @@ public class AskDialogueWindowController : MonoBehaviour, IAskDialogueWindowCont
 {
     // Pozice na které musí
     [Header("Obecné vlastnosti")]
-    [Tooltip("3D pozice v   e světě, na které má být dilaog vygenerován.")]
+    [Tooltip("3D position to draw window in the world.")]
     [SerializeField] private Vector3 _positionToDrawOn;
 
     [Header("Komponenty")]
@@ -49,13 +49,13 @@ public class AskDialogueWindowController : MonoBehaviour, IAskDialogueWindowCont
         UI.PrepareButton(_acceptBtn);
         UI.PrepareButton(_rejectBtn);
 
-        _acceptBtn.onClick.AddListener(() => this.OnTrue());
-        _rejectBtn.onClick.AddListener(() => this.OnFalse<IAskDialogueWindowModul>());
+        _acceptBtn.onClick.AddListener(() => this.Accepted());
+        _rejectBtn.onClick.AddListener(() => this.Rejected<IAskDialogueWindowModul>());
     }
 
-    public void OnTrue() => this.AskDialogueCurrentModul?.OnTrue();
+    public void Accepted() => this.AskDialogueCurrentModul?.OnTrue();
 
-    public void OnFalse<T>() {
+    public void Rejected<T>() {
            if (this.AskDialogueCurrentModul == null)
                return;
 

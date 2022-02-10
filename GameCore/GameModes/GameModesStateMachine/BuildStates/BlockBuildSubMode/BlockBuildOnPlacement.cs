@@ -13,7 +13,7 @@ namespace Assets.Scripts.GameCore.GameModes
     public class BlockBuildOnPlacement {
 
         private BlockChecker _checkerToBuildOn; // last active; last clicked on 
-        public readonly SpaceStationModificator ModifyWorldActionHandler = new SpaceStationModificator();
+        public readonly SpaceStationModificator ModificationCommandHandler = new SpaceStationModificator();
         public SymetricBlock LastPlacedBlock;
 
         private SpaceStation _spaceStation;
@@ -32,6 +32,8 @@ namespace Assets.Scripts.GameCore.GameModes
             // Vytvoření bloku
             var addBlockModAction = new AddBlockCommand(_spaceStation, _checkerToBuildOn, blockTypeToPlace);
             addBlockModAction.ModifySpaceStation();
+
+
             this.LastPlacedBlock = addBlockModAction.LastPlacedBlock;
 
             // Kontrola, jestli je placement ok
@@ -54,11 +56,12 @@ namespace Assets.Scripts.GameCore.GameModes
 
             // player dialog window y/n
 
-            _dialogWindow = new ADWPlaceModeModul(ModifyWorldActionHandler, LastPlacedBlock.BlockPosition);
+            _dialogWindow = new ADWPlaceModeModul(LastPlacedBlock.BlockPosition);
 
             ScreenUIManager.Instance.AskDialogWindowController.SetWindowModul(_dialogWindow);
-            _dialogWindow.PlayerAccepted += OnPlayerAccept;
-            _dialogWindow.PlayerRejected += OnPlayerReject;
+
+            _dialogWindow.PlayerAccepted += PlayerAccepted;
+            _dialogWindow.PlayerRejected += PlayerRejected;
             _dialogWindow.OnWindowOn();
 
 
@@ -85,7 +88,7 @@ namespace Assets.Scripts.GameCore.GameModes
             World.Instance.StartCoroutine(BuildCoroutinesLib.BuildCoroutine(buildTime, timerUIObj, block));
         }
 
-        private void OnPlayerAccept(object sender, EventArgs args) {
+        private void PlayerAccepted(object sender, EventArgs args) {
 
             _dialogWindow.OnWindowOff();
 
@@ -122,13 +125,14 @@ namespace Assets.Scripts.GameCore.GameModes
             NextChecker = nextCheckerToBuildOn;
         }
 
-        private void OnPlayerReject(object sender, EventArgs args) {
+        private void PlayerRejected(object sender, EventArgs args) {
 
             // Zavře se Y/N dialogové okno
             _dialogWindow.OnWindowOff();
 
             // Odstraní blok
-            ModifyWorldActionHandler.ModifySpaceStation(new RemoveBlockCommand(LastPlacedBlock));
+            ModificationCommandHandler.ModifySpaceStation(new RemoveBlockCommand(LastPlacedBlock));
+            ModificationCommandHandler.Modify();
 
             // UI
             UI.BlockLibraryWindowState(true, LastPlacedBlock.BaseCheckerNextTo.checkerType);
@@ -140,12 +144,15 @@ namespace Assets.Scripts.GameCore.GameModes
         private void OnPlacementInvalid() {
 
             UI.GameScreenEvents(Settings.GameScreenEvents.NOT_ABLE_TO);
-            ModifyWorldActionHandler.ModifySpaceStation(new RemoveBlockCommand(LastPlacedBlock));
+
+            ModificationCommandHandler.ModifySpaceStation(new RemoveBlockCommand(LastPlacedBlock));
+            ModificationCommandHandler.Modify();
         }
 
 
         public void RotateBlockBeforePlace(SymetricBlock blockToRotate, Vector3 rotateAngleToAdd) {
-            ModifyWorldActionHandler.ModifySpaceStation(new RotateBlockCommand(blockToRotate, rotateAngleToAdd));
+            ModificationCommandHandler.ModifySpaceStation(new RotateBlockCommand(blockToRotate, rotateAngleToAdd));
+            ModificationCommandHandler.Modify();
         }
 
         public void TurnModeOn() {
@@ -184,8 +191,8 @@ namespace Assets.Scripts.GameCore.GameModes
             this.RestorePlace();
 
             if(_dialogWindow != null) {
-                _dialogWindow.PlayerAccepted -= OnPlayerAccept;
-                _dialogWindow.PlayerRejected -= OnPlayerReject;
+                _dialogWindow.PlayerAccepted -= PlayerAccepted;
+                _dialogWindow.PlayerRejected -= PlayerRejected;
             }
         }
 

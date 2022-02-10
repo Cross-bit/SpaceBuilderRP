@@ -42,14 +42,30 @@ namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
             _placeMode?.PlaceBlock(cardData.BlockType);
         }
 
-
         protected override void PlayerInteracted(object interactionControls, EventArgs e) {
             
-            var actionData = (InteractionEventArgs)e;
+            var actionData = (InteractionEventArgs)e; // TODO: refactor DRY of thid listener(it is in every state)
 
             switch (actionData.ActionPerformed) {
                 case InteractionEventArgs.ActionType.CANCLE_ACTION:
                     _stm.SetNewState(_stm.BuildState);
+                break;
+
+                case InteractionEventArgs.ActionType.MOUSE_L_ACTION:
+
+                    var interaction = new PlayerInteractionsHandler();
+
+                    if (interaction.HitData.transform == null)
+                        return;
+
+                    if (interaction.HitData.transform.gameObject.layer == LayerMask.NameToLayer(Settings.CHECKER_LAYER))
+                    {
+
+                        _stm.SetLastActiveBlock(interaction.HitData); // resets the blocks buffer
+                        _stm.SetLastActiveChecker(interaction.HitData);
+
+                        _stm.SetNewState(_stm.BlockBuildSubState);
+                    }
                 break;
             }
         }

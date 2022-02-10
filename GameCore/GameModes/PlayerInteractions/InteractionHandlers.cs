@@ -6,7 +6,7 @@ namespace Assets.Scripts.GameCore
 {
 
 
-    public class PlayerInteractionsHandler : IInteractionHandler, IInteractionsHandlersController
+    public class PlayerInteractionsHandler : IInteractionHandler
     {
 
         public RaycastHit HitData { get; private set; }
@@ -19,7 +19,7 @@ namespace Assets.Scripts.GameCore
             this.HitData = hitData;
         }
 
-        public void OnInteract() {
+        public void SpaceStationInteract() {
 
             BaseBuildingInteraction blockInteractionHandler = null;
 
@@ -31,13 +31,8 @@ namespace Assets.Scripts.GameCore
             if (HitData.transform.gameObject.layer == LayerMask.NameToLayer(Settings.CHECKER_LAYER))
                 blockInteractionHandler = new CheckerInteractionHandler(HitData);
 
-            blockInteractionHandler?.OnInteract();
+            blockInteractionHandler?.SpaceStationInteract();
         }
-
-        /*public void OnInteractionWithBuildings()
-        {
-        }*/
-
 
         public void OnInteractionWithBot()
         {

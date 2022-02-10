@@ -4,6 +4,6 @@ namespace Assets.Scripts.GameCore.InteractionsInGame
 {
     public interface IInteractionHandler {
         RaycastHit HitData { get; }
-        abstract void OnInteract();
+        abstract void SpaceStationInteract();
     }
 }

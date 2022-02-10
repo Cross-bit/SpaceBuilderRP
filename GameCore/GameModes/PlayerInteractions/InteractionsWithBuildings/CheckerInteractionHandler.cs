@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts.GameCore.InteractionsInGame.InteractionsWithBuildings
 {
-    public class CheckerInteractionHandler : BaseBuildingInteraction, ICheckerInteractionHandler
+    public class CheckerInteractionHandler : BaseBuildingInteraction
     {
         public BlockChecker _lastActiveChecker { get; private set; }
 
@@ -20,7 +20,7 @@ namespace Assets.Scripts.GameCore.InteractionsInGame.InteractionsWithBuildings
 
         public void SetLastActiveChecker() => _lastActiveChecker = Helpers.GetLastActiveChecker(base.LastInteractedBlock, base.HitData.transform.position);
 
-        public override void OnInteract() {
+        public override void SpaceStationInteract() {
             //WorldBuilderManager.Instance.TurnBuildModeAndSubModeOffRecursive();
 
             if (this.LastInteractedBlock == null) return;

@@ -41,30 +41,18 @@ namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
                     
 
                     if (interaction.HitData.transform.gameObject.layer == LayerMask.NameToLayer(Settings.CHECKER_LAYER)) {
-                        SetLastActiveChecker(interaction.HitData);
+                        _stm.SetLastActiveChecker(interaction.HitData);
                         _stm.SetNewState(_stm.BlockBuildSubState);
                     }
 
-                    /*else if (interaction.HitData.transform.gameObject.layer == LayerMask.NameToLayer(Settings.BLOCK_LAYER)) {
-                        SetLastActiveBlock(interaction.HitData); // todo: show window etc.
-                    }*/
+                    else if (interaction.HitData.transform.gameObject.layer == LayerMask.NameToLayer(Settings.BLOCK_LAYER)) {
+                        _stm.SetLastActiveBlock(interaction.HitData);
+                        UI.BlockDetailWindowState(true, _stm.LastActiveBlock);
+                        AudioManager.Instance.Play(Settings.SoundEffects.mouse_click_1);
+                    }
 
                     break;
             }
         }
-
-        private void SetLastActiveBlock(RaycastHit hitData) {
-            GameObject checker_obj = hitData.transform.gameObject;
-            Vector3 checkers_pos = checker_obj.transform.parent.gameObject.transform.position; //!!! GLOBÁLNÍ POZICE Bloku (GameObjektu)!!!
-            _stm.LastActiveBlock = Helpers.GetBlock(checkers_pos);
-        }
-
-        private void SetLastActiveChecker(RaycastHit hitData) {
-            if (_stm.LastActiveBlock == null)
-                SetLastActiveBlock(hitData);
-
-            _stm.LastActiveChecker = Helpers.GetLastActiveChecker(_stm.LastActiveBlock, hitData.transform.position);
-        }
-
     }
 }

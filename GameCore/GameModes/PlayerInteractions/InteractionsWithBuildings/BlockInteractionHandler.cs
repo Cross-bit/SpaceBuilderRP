@@ -10,7 +10,7 @@ namespace Assets.Scripts.GameCore.InteractionsInGame.InteractionsWithBuildings
             base.LastInteractedBlock = Helpers.GetBlock(HitData.transform.position);
         }
 
-        public override void OnInteract() {
+        public override void SpaceStationInteract() {
 
             if (base.LastInteractedBlock == null) return;
 

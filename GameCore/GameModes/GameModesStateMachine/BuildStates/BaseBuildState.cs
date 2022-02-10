@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
 {
@@ -50,6 +51,21 @@ namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
             switch (actionData.ActionPerformed) {
                 case InteractionEventArgs.ActionType.CANCLE_ACTION:
                     _stm.SetNewState(_stm.IdleGameState);
+                    break;
+                case InteractionEventArgs.ActionType.MOUSE_L_ACTION:
+
+                    var interaction = new PlayerInteractionsHandler();
+
+                    if (interaction.HitData.transform == null)
+                        return;
+
+                    if (interaction.HitData.transform.gameObject.layer == LayerMask.NameToLayer(Settings.CHECKER_LAYER)) {
+
+                        _stm.SetLastActiveBlock(interaction.HitData); // resets the blocks buffer
+                        _stm.SetLastActiveChecker(interaction.HitData);
+
+                        _stm.SetNewState(_stm.BlockBuildSubState);
+                    }
                     break;
             }
         }
