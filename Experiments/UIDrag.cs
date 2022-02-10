@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-// TODO: Možná nějak optimalizujeme, aby to nemusel mít každy UI objekt, nebo mu to přidáme kódem.
+
 public class UIDrag : MonoBehaviour
-    {
+{
     private float offsetX;
     private float offsetY;
 

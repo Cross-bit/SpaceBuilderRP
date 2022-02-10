@@ -1,0 +1,16 @@
+{
+    "name": "ScenesLoadBtns",
+    "rootNamespace": "",
+    "references": [
+        "GUID:79f68f015f0bdb64a9c1e678f13b1094"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

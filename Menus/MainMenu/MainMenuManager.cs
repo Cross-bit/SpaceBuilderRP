@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MainMenuManager : Singleton<MainMenuManager>
+public class MainMenuManager
 {
 
 

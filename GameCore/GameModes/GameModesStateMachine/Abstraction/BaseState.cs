@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
 {
-    public abstract class BaseState
-    {
+    public abstract class BaseState {
+
         private StateMachine _stateMachine;
 
         public BaseState(StateMachine stateMachine)
