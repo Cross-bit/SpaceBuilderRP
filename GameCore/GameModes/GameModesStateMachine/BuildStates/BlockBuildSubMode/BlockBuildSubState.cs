@@ -13,7 +13,7 @@ namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
 
         GameModesSM _stm;
 
-        BlockBuildPlacing _placeMode;
+        BlockBuildOnPlacement _placeMode;
 
         public BlockBuildSubState(GameModesSM stateMachine) : base (stateMachine) {
             _stm = stateMachine;
@@ -26,7 +26,7 @@ namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
             if (_stm.LastActiveChecker == null)
                 Exit();
 
-            _placeMode = new BlockBuildPlacing(_stm.LastActiveChecker, World.Instance.SpaceStation);
+            _placeMode = new BlockBuildOnPlacement(_stm.LastActiveChecker, World.Instance.SpaceStation);
             _placeMode.TurnModeOn();
 
             ScreenUIManager.Instance.allBuildCards?.ForEach(card => {

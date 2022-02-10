@@ -3,17 +3,17 @@ using UnityEngine;
 
 namespace Assets.Scripts.GameCore.WorldBuilding.ModifyWorld
 {
-    public class RotateBlockAction : IModifyWorldAction
+    public class RotateBlockCommand : IModifySpaceStationCommand
     {
         private SymetricBlock _blockToRotate;
         private Vector3 _angleToAdd;
 
-        public RotateBlockAction(SymetricBlock blockToRotate, Vector3 angleToAdd) {
+        public RotateBlockCommand(SymetricBlock blockToRotate, Vector3 angleToAdd) {
             _blockToRotate = blockToRotate;
             _angleToAdd = angleToAdd;
         }
 
-        public void ModifyTheWorld() => RotateSymetricBlockForCertainAngle();
+        public void ModifySpaceStation() => RotateSymetricBlockForCertainAngle();
 
         private void RotateSymetricBlockForCertainAngle()
         {

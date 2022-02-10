@@ -19,6 +19,8 @@ namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
 
         public virtual void OnUpdate() { return; }
 
+        public virtual void OnFixedUpdate() { return; }
+
         public virtual void OnLateUpdate() { return; }
 
         public abstract void Exit();

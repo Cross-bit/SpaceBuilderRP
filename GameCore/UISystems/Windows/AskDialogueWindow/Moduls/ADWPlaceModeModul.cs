@@ -14,13 +14,13 @@ namespace Assets.Scripts.GameCore.UISystems.AskDialogueWindow
         private Vector3 _positionToDraw;
         private AskDialogueWindowController _controller = ScreenUIManager.Instance.AskDialogWindowController;
 
-        private readonly ModifyWorldActionHandler _modifyWorldActionHandler;
+        private readonly SpaceStationModificator _modifyWorldActionHandler;
 
         public event EventHandler PlayerAccepted;
         public event EventHandler PlayerRejected;
 
 
-        public ADWPlaceModeModul(ModifyWorldActionHandler modifyWorldActionHandler, Vector3 positionToDraw) {
+        public ADWPlaceModeModul(SpaceStationModificator modifyWorldActionHandler, Vector3 positionToDraw) {
             _modifyWorldActionHandler = modifyWorldActionHandler;
             _positionToDraw = positionToDraw;
         }

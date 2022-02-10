@@ -54,11 +54,5 @@ namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
             }
         }
 
-        public override void OnLateUpdate() {
-
-        }
-
-        public override void OnUpdate() {
-        }
     }
 }

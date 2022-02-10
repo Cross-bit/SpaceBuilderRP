@@ -19,13 +19,18 @@ namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
         private void Update() {
             _currentState?.OnUpdate();
         }
+
+        private void FixedUpdate() {
+            _currentState?.OnFixedUpdate();
+        }
+
         private void LateUpdate() {
             _currentState?.OnLateUpdate();
 
         }
 
         public void SetNewState(BaseState changeTo) {
-            _currentState.Exit();
+            _currentState?.Exit();
 
             _currentState = changeTo;
 

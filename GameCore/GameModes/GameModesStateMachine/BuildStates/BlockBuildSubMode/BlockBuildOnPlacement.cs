@@ -8,11 +8,12 @@ using System;
 
 namespace Assets.Scripts.GameCore.GameModes
 {
-    public class BlockBuildPlacing {
+    // cleaning helper class when placing block on the controller
 
+    public class BlockBuildOnPlacement {
 
         private BlockChecker _checkerToBuildOn; // last active; last clicked on 
-        public readonly ModifyWorldActionHandler ModifyWorldActionHandler = new ModifyWorldActionHandler();
+        public readonly SpaceStationModificator ModifyWorldActionHandler = new SpaceStationModificator();
         public SymetricBlock LastPlacedBlock;
 
         private SpaceStation _spaceStation;
@@ -21,7 +22,7 @@ namespace Assets.Scripts.GameCore.GameModes
 
         public BlockChecker NextChecker = null;
 
-        public BlockBuildPlacing(BlockChecker checkerToBuildOn, SpaceStation spaceStation) {
+        public BlockBuildOnPlacement(BlockChecker checkerToBuildOn, SpaceStation spaceStation) {
             _checkerToBuildOn = checkerToBuildOn;
             _spaceStation = spaceStation;
         }
@@ -29,8 +30,8 @@ namespace Assets.Scripts.GameCore.GameModes
         public void PlaceBlock(Settings.Blocks_types blockTypeToPlace) {
 
             // Vytvoření bloku
-            var addBlockModAction = new AddBlockToWorldAction(_spaceStation, _checkerToBuildOn, blockTypeToPlace);
-            addBlockModAction.ModifyTheWorld();
+            var addBlockModAction = new AddBlockCommand(_spaceStation, _checkerToBuildOn, blockTypeToPlace);
+            addBlockModAction.ModifySpaceStation();
             this.LastPlacedBlock = addBlockModAction.LastPlacedBlock;
 
             // Kontrola, jestli je placement ok
@@ -127,7 +128,7 @@ namespace Assets.Scripts.GameCore.GameModes
             _dialogWindow.OnWindowOff();
 
             // Odstraní blok
-            ModifyWorldActionHandler.ModifyWorld(new RemoveBlockFromTheWorldAction(LastPlacedBlock));
+            ModifyWorldActionHandler.ModifySpaceStation(new RemoveBlockCommand(LastPlacedBlock));
 
             // UI
             UI.BlockLibraryWindowState(true, LastPlacedBlock.BaseCheckerNextTo.checkerType);
@@ -139,12 +140,12 @@ namespace Assets.Scripts.GameCore.GameModes
         private void OnPlacementInvalid() {
 
             UI.GameScreenEvents(Settings.GameScreenEvents.NOT_ABLE_TO);
-            ModifyWorldActionHandler.ModifyWorld(new RemoveBlockFromTheWorldAction(LastPlacedBlock));
+            ModifyWorldActionHandler.ModifySpaceStation(new RemoveBlockCommand(LastPlacedBlock));
         }
 
 
         public void RotateBlockBeforePlace(SymetricBlock blockToRotate, Vector3 rotateAngleToAdd) {
-            ModifyWorldActionHandler.ModifyWorld(new RotateBlockAction(blockToRotate, rotateAngleToAdd));
+            ModifyWorldActionHandler.ModifySpaceStation(new RotateBlockCommand(blockToRotate, rotateAngleToAdd));
         }
 
         public void TurnModeOn() {

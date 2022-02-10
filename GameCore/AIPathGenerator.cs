@@ -6,14 +6,13 @@ public class AIPathGenerator
 {
     public List<GameObject> allMovePoints = new List<GameObject>();
 
-
-    // Obecné vlastnosti cesty
+    // General attributes
     public Transform pathHolder { get; set; }
     Color pathColor;
 
     // Generace Křivky
     Transform target;
-    float smooth { get; set; } // Kolik mezi bodů vložit(TODO:)
+    float smooth { get; set; } // how many points to insert inbetween TODO:
     float obsticlesOffset { get; set; }
     Vector3 startPos { get; set; }
     public bool isPathReady = false;

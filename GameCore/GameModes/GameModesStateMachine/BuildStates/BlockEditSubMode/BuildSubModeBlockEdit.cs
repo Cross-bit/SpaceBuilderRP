@@ -7,14 +7,12 @@ namespace Assets.Scripts.GameCore.GameModes
 
     public class BuildSubModeBlockEdit
     {
-        // todo
 
-        private readonly ModifyWorldActionHandler modifyWorldActionHandler = new ModifyWorldActionHandler();
+        private readonly SpaceStationModificator modifyWorldActionHandler = new SpaceStationModificator();
 
-        public void RotateBlock(SymetricBlock blockToRotate, Vector3 rotateAngleToAdd)
-        {
-            //if (Settings.isBuildMode)
-                this.modifyWorldActionHandler.ModifyWorld(new RotateBlockAction(blockToRotate, rotateAngleToAdd));
+        public void RotateBlock(SymetricBlock blockToRotate, Vector3 rotateAngleToAdd) {
+
+            this.modifyWorldActionHandler.ModifySpaceStation(new RotateBlockCommand(blockToRotate, rotateAngleToAdd));
         }
     }
 }

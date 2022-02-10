@@ -3,27 +3,25 @@
 namespace Assets.Scripts.GameCore.WorldBuilding.ModifyWorld
 {
     // TODO: 
-    public class RemoveBlockFromTheWorldAction : IModifyWorldAction
+    public class RemoveBlockCommand : IModifySpaceStationCommand
     {
         private readonly SymetricBlock _blockToRemove;
 
-        public RemoveBlockFromTheWorldAction(SymetricBlock blockToRemove){
+        public RemoveBlockCommand(SymetricBlock blockToRemove){
             this._blockToRemove = blockToRemove;
         }
 
 
-        public void ModifyTheWorld() {
+        public void ModifySpaceStation() {
             DestroyBlock();
         }
 
         private void DestroyBlock()
         {
-            // VYMAŽEME FYZICKÝ OBJEKT
-            GameObject.Destroy(_blockToRemove.BlockContainer); // TODO: udělat pool!!!!
+            GameObject.Destroy(_blockToRemove.BlockContainer); // TODO: from pool !!!!
 
             this.ResetNeighbourCheckers();
-
-            // VE FINÁLE Odstraníme z db
+            
             BlockLibrary.BlockLibrary.blocksLib.Remove(_blockToRemove);
         }
 
@@ -41,7 +39,7 @@ namespace Assets.Scripts.GameCore.WorldBuilding.ModifyWorld
             }
         }
 
-       /* public void RemoveFromTheWorldBlock() // Tak jakou TODO: ...
+       /* public void RemoveFromTheWorldBlock() TODO: ...
         {
             MonoBehaviour.Destroy(_blockToRemove.BlockContainer); // Odstraníme
 

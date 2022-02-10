@@ -66,9 +66,5 @@ namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
             _stm.LastActiveChecker = Helpers.GetLastActiveChecker(_stm.LastActiveBlock, hitData.transform.position);
         }
 
-        public override void OnUpdate() { }
-
-        public override void OnLateUpdate() { }
-
     }
 }

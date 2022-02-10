@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.GameCore.WorldBuilding.ModifyWorld
 {
-    public interface IModifyWorldAction
-    {
-    //    World world { get; }
-
-        void ModifyTheWorld();
+    public interface IModifySpaceStationCommand {
+        void ModifySpaceStation();
     }
 }
