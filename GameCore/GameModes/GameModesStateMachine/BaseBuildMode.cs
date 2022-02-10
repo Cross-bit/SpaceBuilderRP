@@ -24,7 +24,6 @@ namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
             // Barevný grid podkladu
             BlockLibrary.blocksLib.ForEach(b => b.BlockGrid?.SetGridActive(true));
             UI.BuildModeElementsState(true);
-            GameModesManagerNew.Instance.CurrentGameState = GameModesManagerNew.Instance.BuildModeState;
 
             InputManager.Instance.PlayerActionInputs.PlayerInteracted += OnPlayerAction;
         }
@@ -39,7 +38,6 @@ namespace Assets.Scripts.GameCore.GameModes.GameModesStateMachine
             // Gizmos
             GizmosInGame.GridState(false);
             BlockLibrary.blocksLib.ForEach(b => b.BlockGrid?.SetGridActive(false));
-            GameModesManagerNew.Instance.CurrentGameState = GameModesManagerNew.Instance.IdleModeState;
 
             InputManager.Instance.PlayerActionInputs.PlayerInteracted -= OnPlayerAction;
         }
