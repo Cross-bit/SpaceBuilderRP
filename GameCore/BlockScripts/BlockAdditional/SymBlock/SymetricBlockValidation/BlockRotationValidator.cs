@@ -6,9 +6,9 @@ namespace Assets.Scripts.GameCore.BlockScripts.BlockAdditional
 
     public class BlockRotationValidator 
     {
-        SymBlock _block;
+        SymetricBlock _block;
 
-        public BlockRotationValidator(SymBlock block) {
+        public BlockRotationValidator(SymetricBlock block) {
             _block = block;
         }
 

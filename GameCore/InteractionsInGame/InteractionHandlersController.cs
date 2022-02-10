@@ -6,21 +6,20 @@ namespace Assets.Scripts.GameCore
 {
 
 
-    public class InteractionsHandlersController : IInteractionHandler, IInteractionsHandlersController
+    public class PlayerInteractionsHandler : IInteractionHandler, IInteractionsHandlersController
     {
 
         public RaycastHit HitData { get; private set; }
 
         public bool IsInteractionValid { get; private set; }
 
-        public InteractionsHandlersController()
+        public PlayerInteractionsHandler()
         {
             this.IsInteractionValid = Helpers.CastInteractRay(out var hitData);
             this.HitData = hitData;
         }
 
-        public void OnInteractionWithBuildings()
-        {
+        public void OnInteract() {
 
             BaseBuildingInteraction blockInteractionHandler = null;
 
@@ -34,6 +33,10 @@ namespace Assets.Scripts.GameCore
 
             blockInteractionHandler?.OnInteract();
         }
+
+        /*public void OnInteractionWithBuildings()
+        {
+        }*/
 
 
         public void OnInteractionWithBot()

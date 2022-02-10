@@ -2,8 +2,8 @@
 
 namespace Assets.Scripts.GameCore.InteractionsInGame
 {
-    public interface IInteractionHandler
-    {
+    public interface IInteractionHandler {
         RaycastHit HitData { get; }
+        abstract void OnInteract();
     }
 }

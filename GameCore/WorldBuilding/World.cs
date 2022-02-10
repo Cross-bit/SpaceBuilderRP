@@ -1,70 +1,61 @@
-﻿using Assets.Scripts.GameCore.BlockScripts.BlockAdditional.BlockFactory;
-using Assets.Scripts.GameCore.WorldBuilding.BlockLibrary;
-using Assets.Scripts.BlockScripts.BlockAdditional;
-using System.Collections.Generic;
+﻿using Assets.Scripts.GameCore.UISystems.AskDialogueWindow;
+using Assets.Scripts.GameCore.BuildCoroutines;
+using Assets.Scripts.GameCore.GameModes;
 using UnityEngine;
 using System;
+using Assets.Scripts.GameCore.WorldBuilding.ModifyWorld;
+using System.Collections;
+using System.Collections.Generic;
 
-public class World
+public class World : Singleton<World>
 {
-    private IBlock _newBlock;
-    public string WorldSeed;
+        // Nastavení světa
+        public SpaceStation SpaceStation { get; private set; }
+        
+        void Start() {
+            // loads block library 
+            foreach (var blockData in Resources.LoadAll<BlockSO>(Settings.BLOCKSO_PATH)) {
+                Settings.blocksTypeLibrary.Add(blockData.blockType, blockData);
+                UI.suitableBlocksOrganised.Add(blockData);
+            }
 
-  //  public BlockChecker LastActiveChecker { get; set; } // Poslední kontrolér na který se kliklo
-  //  public Block LastActiveBlock { get; set; } // Poslední blok, na který se kliklo
 
-    // Databáze všech bodů a jejich sousedů (možných napojení), které jsou definiční pro možné cesty vně stanice
-    Dictionary<Vector3, List<Vector3>> pathPointsGroups = new Dictionary<Vector3, List<Vector3>>();
+            // Pokud se jedná o komplet nový svět:
+            if (Manager.Instance.isNewWorld) {
+                Settings.defaultWorldPosition = this.transform.position;
+                var seed = Mathf.Abs("seed".GetHashCode()).ToString();
+                SpaceStation = new SpaceStation(seed);
+                SpaceStation.CreateNewSpaceStation();
+            }
+            else {
+                // Load todo:
+            }
 
-    public World(string seed) {
-        this.WorldSeed = seed;
-    }
+            // Load zbylých proměnných
+            Settings.largestSymConstant = Helpers.GetLargestSymConstantValue();
 
-    public void CreateNewWorld() {
-        CreateCityHallBlock();
+        }
+    
+        // BUILDMODE
+        public void PlaceBlockInWorld(Settings.Blocks_types blockType) {
+            var subMode = GameModesManager.Instance.subModesHandler.CurrentSubMode as BuildSubModePlace;
+            subMode.PlaceBlock(blockType);
+        }
+        
+        /*public void TurnBuildModeOn(BlockChecker controllerToBuildOn = null) {
 
-        BlockLibrary.AddBlockToBlocksLib(_newBlock); // Úspěšně vytvořený blok do db
-        _newBlock.BuildBlock(); // Postavíme blok 
+            GameModesManagerNew.Instance.CurrentGameState.TurnOnBuildMode();
 
-    }
+            if (controllerToBuildOn != null) {
+                var placeMode = new BuildSubModePlace(controllerToBuildOn, SpaceStation);
+                GameModesManager.Instance.subModesHandler.SetSubMode(placeMode);
+                GameModesManager.Instance.subModesHandler.TurnModeOn();
+            }
+        }*/
 
-    private void CreateCityHallBlock() {
-        if (!Settings.blocksTypeLibrary.ContainsKey(Settings.Blocks_types.CITY_HALL)) {
-            Debug.Log("Cityhall block data chybí v databázi ");
-            return; }
-
-        _newBlock = BlockFactory.CreateSymBlock(Settings.defaultWorldPosition, new Vector3(),
-            Settings.blocksTypeLibrary[Settings.Blocks_types.CITY_HALL], null);
-
-        var bConstructor = BlockFactory.BlockConstructor((SymBlock)_newBlock);
-
-        _newBlock.ConstructBlock(bConstructor);
-        _newBlock.ConstructBlockPost(bConstructor);
-
-        _newBlock.BlocksMainGraphics.gameObject.SetActive(true);
-    }
-
-    public SymBlock CreateNewSymBlock(Vector3 position, Vector3 rotation, BlockSO BlockData, BlockChecker lastActiveChecker)
-    {
-        _newBlock = (SymBlock) BlockFactory.CreateSymBlock(position, rotation, BlockData, lastActiveChecker);
-
-        var newBlock = (SymBlock)_newBlock;
-
-        var bConstructor = BlockFactory.BlockConstructor((SymBlock)newBlock);
-
-        bool wasBlockConstructed = newBlock.ConstructBlock(bConstructor);
-
-        if (!wasBlockConstructed)
-            Debug.LogError("Symetricý blok se nepodařilo vytvořit!");
-
-        newBlock.SetBlockOrientation();
-
-        newBlock.ConstructBlockPost(bConstructor); 
-
-        return (SymBlock)_newBlock;
-    }
-
+        // turn build mode and submodes
+        /*public void TurnBuildModeOff() {
+            GameModesManager.Instance.subModesHandler.StopCurrentSubMode(typeof(BuildSubModePlace));
+            GameModesManagerNew.Instance.CurrentGameState.TurnOnIndleMode();
+        }*/
 }
-
-
-

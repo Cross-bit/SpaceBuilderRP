@@ -219,25 +219,21 @@ namespace RTS_Cam
 
 
         /// <summary> update camera movement and rotation </summary>
-        private void CameraUpdate()
-        {
-            // Pokud je kamera
-            if (Settings.isCamera)
-            {
-                if (FollowingTarget && followTarget)
-                {
-                    if(targetFollow != null)
-                        FollowTarget();
-                }
-                else
-                {
-                    Move();
-                    Rotation();
-                }
+        private void CameraUpdate() {
 
-                HeightCalculation();
-                LimitPosition();
+            if (FollowingTarget && followTarget)
+            {
+                if(targetFollow != null)
+                    FollowTarget();
             }
+            else
+            {
+                Move();
+                Rotation();
+            }
+
+            HeightCalculation();
+            LimitPosition();
 
         }
 
@@ -315,28 +311,9 @@ namespace RTS_Cam
             if (distanceToGround != targetHeight)
                 difference = targetHeight - distanceToGround;
 
-
-            //  Debug.Log(targetFollow);
-            // Pokud nemáme cíl
-            /*  if (targetFollow == null)
-              {*/
-            // Lerp pozice při scrollu
+            // Lerp while scrolling
             m_Transform.position = Vector3.Lerp(m_Transform.position,
                 new Vector3(m_Transform.position.x, targetHeight + difference, m_Transform.position.z), Time.deltaTime * heightDampening);
-            /*   }
-               else
-               {
-
-                   //  m_Transform.LookAt(targetFollow);
-                   Vector3 targetPos = new Vector3(targetFollow.position.x, m_Transform.position.y, targetFollow.position.z) + targetOffset/*+ Vector3.Scale(targetOffset, Settings.GetVector3Population_(m_Transform.position));*/
-            
-
-            /*       m_Transform.position = Vector3.Lerp(m_Transform.position,
-                      targetPos, zoomPos * targetZoomSpeed);
-                  Vector3 targetPos = new Vector3(targetFollow.position.x, m_Transform.position.y, targetFollow.position.z) + Vector3.Scale(targetOffset, Settings.GetVector3Population_(m_Transform.position));
-                     m_Transform.position = Vector3.MoveTowards(m_Transform.position, targetPos, Time.deltaTime * followingSpeed);
-
-             }¨*/
         }
 
 
@@ -366,11 +343,6 @@ namespace RTS_Cam
 
              // Vektor směru k cíli
              Vector3 targetDir = targetFollow.position - m_Transform.position;
-            /*
-             // Normalizujeme na 1 a získáme vektor opačný, od cíle
-             Vector3 distanceVectorNormalized = targetDir.normalized * -1;
-             // Posuneme na pozici cíle
-             Vector3 targetPosition = (distanceVectorNormalized * distanceFromTarget) + targetFollow.position;*/
 
             Vector3 targetPosition = targetFollow.position * 1.5f;
 

@@ -11,7 +11,8 @@ namespace Assets.Scripts.GameCore.PathFinding
     public static class PathFindingNodesLibrary
     {
 
-        public static void AddBlockToPathFinding(SymBlock blockToAdd) {
+        public static void AddBlockToPathFinding(SymetricBlock blockToAdd) {
+
             // Pokud se jedná o uzel
             if (blockToAdd.isNode)
             {
@@ -39,7 +40,7 @@ namespace Assets.Scripts.GameCore.PathFinding
 
 
                         // Podíváme se opět na všechny bloky ve scéně 
-                        foreach (SymBlock b_neighbour in BlockLibrary.blocksLib)
+                        foreach (SymetricBlock b_neighbour in BlockLibrary.blocksLib)
                         {
                             Vector3 b_neighbour_pop_pos = Settings.GetVector3Population_(b_neighbour.BlockContainer.transform.position);
                             // Pokud se nejedná o hlavní blok (blok ke kterému hledáme souseda)

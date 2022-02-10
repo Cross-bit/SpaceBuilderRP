@@ -6,8 +6,6 @@ namespace Assets.Scripts.GameCore
     {
         bool IsInteractionValid { get; }
 
-        void OnInteractionWithBuildings(/*BaseBuildingInteraction typeOfBuildingInteraction*/);
-
         void OnInteractionWithBot();
     }
 }

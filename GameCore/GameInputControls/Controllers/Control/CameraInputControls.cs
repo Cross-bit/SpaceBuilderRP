@@ -25,7 +25,7 @@ namespace Assets.Scripts.GameCore.GameControls.Controllers
         }
 
 
-        public void UnRegisterInputs(InputMaster inputSystemAssetScript){
+        public void UnregisterInputs(InputMaster inputSystemAssetScript){
             inputSystemAssetScript.Player.MoveHorizontaly.performed -= SetCameraHorizontalMove;
             inputSystemAssetScript.Player.SpeedUpCamera.performed -= SetCameraMoveFasterButton;
             inputSystemAssetScript.Player.CameraRotationKey.performed -= SetCameraRotationButton;

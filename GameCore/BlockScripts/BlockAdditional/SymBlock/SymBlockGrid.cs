@@ -13,10 +13,10 @@ namespace Assets.Scripts.BlockScripts.BlockAdditional
         private Settings.Checkers_types _parentBlockType;
         private Color _gridColor;
 
-        SymBlock parentBlock;
+        SymetricBlock parentBlock;
 
         // TODO: asi poslat celý objekt bloku
-        public SymBlockGrid(SymBlock parentBlock, Transform gridParentGameObject, Vector3 parentBlockTransform, Vector3 gridPosition, Vector3 parentBlockRotation, Settings.Checkers_types parentBlockType)
+        public SymBlockGrid(SymetricBlock parentBlock, Transform gridParentGameObject, Vector3 parentBlockTransform, Vector3 gridPosition, Vector3 parentBlockRotation, Settings.Checkers_types parentBlockType)
         {
             this._gridPosition = gridPosition;
             this._parentBlockPosition = parentBlockTransform;

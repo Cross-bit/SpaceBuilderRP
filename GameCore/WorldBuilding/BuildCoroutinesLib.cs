@@ -1,12 +1,11 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Assets.Scripts.GameCore.BuildCoroutinesLib
+namespace Assets.Scripts.GameCore.BuildCoroutines
 {
     public static class BuildCoroutinesLib
     {
-        public static IEnumerator BuildCoroutine(WaitForSeconds buildTime, GameObject timerObj, SymBlock block)
-        {
+        public static IEnumerator BuildCoroutine(WaitForSeconds buildTime, GameObject timerObj, SymetricBlock block) {
             // Objekt UI časovače.
             GameObject currentTimer = timerObj;
             currentTimer.SetActive(true);

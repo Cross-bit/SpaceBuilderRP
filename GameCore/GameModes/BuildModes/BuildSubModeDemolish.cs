@@ -5,9 +5,9 @@ namespace Assets.Scripts.GameCore.GameModes
     {
         private readonly ModifyWorldActionHandler modifyWorldActionHandler = new ModifyWorldActionHandler();
 
-        public void RemoveBlockFromWorld(SymBlock blockToRemove)
+        public void RemoveBlockFromWorld(SymetricBlock blockToRemove)
         {
-            if (Settings.isBuildMode)
+            //if (Settings.isBuildMode)
                 this.modifyWorldActionHandler.ModifyWorld(new RemoveBlockFromTheWorldAction(blockToRemove));
         }
         

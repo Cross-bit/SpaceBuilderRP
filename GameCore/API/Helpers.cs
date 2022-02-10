@@ -82,11 +82,11 @@ public static class Helpers
     }
 
     // Vrací blok z db(dictionary) podle pozice
-    public static SymBlock GetBlock(Vector3 b_position = new Vector3())
+    public static SymetricBlock GetBlock(Vector3 b_position = new Vector3())
     {
-        SymBlock f_block = null;
+        SymetricBlock f_block = null;
 
-        foreach (SymBlock b in BlockLibrary.blocksLib) // Bloky světa
+        foreach (SymetricBlock b in BlockLibrary.blocksLib) // Bloky světa
         {
             if (b.BlockPosition == b_position)
             {
@@ -102,7 +102,7 @@ public static class Helpers
     /// <param name="lastActiveBlock"></param>
     /// <param name="placePos"> //!!! GLOBÁLNÍ POZICE CHECKERU !!!</param>
     /// <returns></returns>
-    public static BlockChecker GetLastActiveChecker(SymBlock lastActiveBlock, Vector3 placePos)
+    public static BlockChecker GetLastActiveChecker(SymetricBlock lastActiveBlock, Vector3 placePos)
     {
         BlockChecker lastActiveChecker = null;
 
@@ -134,13 +134,13 @@ public static class Helpers
     /// <param name="originPos"> Globální pozice bloku. </param>
     /// <param name="radius"></param>
     /// <returns></returns>
-    public static List<SymBlock> GetAllBlocksInRadius(SymBlock b_base, float radius)
+    public static List<SymetricBlock> GetAllBlocksInRadius(SymetricBlock b_base, float radius)
     {
-        var blocksInRadius = new List<SymBlock>();
+        var blocksInRadius = new List<SymetricBlock>();
         if (radius > 0)
         if (BlockLibrary.blocksLib != null)
         {
-            foreach (SymBlock block in BlockLibrary.blocksLib)
+            foreach (SymetricBlock block in BlockLibrary.blocksLib)
             {
                 Vector3 vecBetween = block.BlockContainer.gameObject.transform.position - b_base.BlockContainer.transform.position;
                 float distanceBetween = vecBetween.magnitude;
@@ -233,25 +233,11 @@ public static class Helpers
         return new Vector2(Screen.width/2, Screen.height / 2);
     }
 
-    /*IEnumerator BuildCoroutine(float buildTime, GameObject obj, Block block)
-    {
-        // Objekt UI časovače.
-        GameObject currentTimer = obj;
-
-        currentTimer.SetActive(true);
-        //TODO:
-        yield return new WaitForSeconds(buildTime);
-        block.BuildBlock();
-        currentTimer.SetActive(false);
-        ScreenUIHolder.Instance.UIPoolList.ReturnToPool(Settings.PoolTypes.UI_TIMER, currentTimer);
-    }*/
-
     public static bool CastInteractRay(out RaycastHit hitData)
     {
         hitData = new RaycastHit();
 
-        if (Settings.canInteract)
-        {
+        if (Settings.canInteract) {
             // Ray data
             Ray ray = Manager.Instance.mainCamera.ScreenPointToRay(InputManager.Instance.GeneralInputs.MousePosition);
 

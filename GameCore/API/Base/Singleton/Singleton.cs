@@ -22,8 +22,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : Component
             }
             return _Instance;
         }
-        set
-        {
+        set {
             _Instance = value;
         }
     }

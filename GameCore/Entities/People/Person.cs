@@ -20,7 +20,7 @@ public class Person : ILiveOrganism
     }
 
 
-    public SymBlock GetCurrentBlock(Node nodeAt)
+    public SymetricBlock GetCurrentBlock(Node nodeAt)
     {
         return Helpers.GetBlock(nodeAt.position);
     }

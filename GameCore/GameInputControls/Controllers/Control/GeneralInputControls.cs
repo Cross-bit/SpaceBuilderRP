@@ -23,7 +23,7 @@ namespace Assets.Scripts.GameCore.GameControls.Controllers
             inputSystemAssetScript.General.CancelOperationOrPauseGame.performed += SetCancleOperation;
         }
 
-        public void UnRegisterInputs(InputMaster inputSystemAssetScript){
+        public void UnregisterInputs(InputMaster inputSystemAssetScript){
             inputSystemAssetScript.General.Interact.performed -= SetPlayerInteraction;
             inputSystemAssetScript.General.MousePosition.performed -= SetMousePosition;
             inputSystemAssetScript.General.AxisInput.performed -= SetAxisInput;

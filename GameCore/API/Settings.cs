@@ -96,13 +96,8 @@ public static class Settings
     // Může hráč interagovat se světem?
     public readonly static bool canInteract = true;
 
-    // Je něco zvýrazněno (checker/blok)
-    public static bool isBuildMode = false;
-
     //Byla hra již )úspěšně načtena?
     public static bool isGameLoaded = false;
-
-    public static bool isPlacingBlock = false;
 
     // Automatické přepínání kontrolérů při buildu
     public static bool switchCheckers = true;

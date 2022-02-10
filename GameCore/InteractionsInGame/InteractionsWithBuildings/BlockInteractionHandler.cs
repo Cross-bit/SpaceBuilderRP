@@ -6,13 +6,12 @@ namespace Assets.Scripts.GameCore.InteractionsInGame.InteractionsWithBuildings
     {
         public BlockInteractionHandler(RaycastHit hitData) : base(hitData) { }
 
-        public override void SetLastBlockPlayerInteractedWith()
-        {
+        public override void SetLastBlockPlayerInteractedWith() {
             base.LastInteractedBlock = Helpers.GetBlock(HitData.transform.position);
         }
 
-        public override void OnInteract()
-        {
+        public override void OnInteract() {
+
             if (base.LastInteractedBlock == null) return;
 
             if (base.LastInteractedBlock.isBlockBuilded)

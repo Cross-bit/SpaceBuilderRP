@@ -9,7 +9,7 @@ public class BuildRobotsManager : Singleton<BuildRobotsManager>
        // RobotsDatabase.AddRobotToDatabase(new BuildRobot() { MovementSpeed = 5, RotationSpeed = 5 });
     }
 
-    public void CreateRobot(IRobot robotToCreate, SymBlock baseToCreateIn) {
+    public void CreateRobot(IRobot robotToCreate, SymetricBlock baseToCreateIn) {
         // Logika jak vytvořit robota a kde apod. TODO:
     }
 

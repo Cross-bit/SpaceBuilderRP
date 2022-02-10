@@ -13,7 +13,7 @@ public class BlockController : MonoBehaviour
     public float lenght;
     public Vector3 colDetectionBoxes;
 
-    public SymBlock block;
+    public SymetricBlock block;
 
 
     // Start is called before the first frame update

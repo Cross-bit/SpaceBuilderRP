@@ -1,7 +1,6 @@
 ﻿namespace Assets.Scripts.GameCore.InteractionsInGame.InteractionsWithBuildings
 {
-    public interface ICheckerInteractionHandler
-    {
+    public interface ICheckerInteractionHandler {
         BlockChecker _lastActiveChecker { get; }
         void SetLastActiveChecker();
     }

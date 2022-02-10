@@ -3,6 +3,8 @@ using Assets.Scripts.GameCore.UISystems.AskDialogueWindow;
 using UnityEngine;
 using Assets.Scripts.GameCore.WorldBuilding.BlockLibrary;
 using System;
+using Assets.Scripts.GameCore.WorldBuilding.AdditionalForBuild;
+using Assets.Scripts.GameCore.BuildCoroutines;
 
 namespace Assets.Scripts.GameCore.GameModes
 {
@@ -10,39 +12,34 @@ namespace Assets.Scripts.GameCore.GameModes
     {
         private BlockChecker _checkerToBuildOn; // last active; last clicked on 
         public readonly ModifyWorldActionHandler ModifyWorldActionHandler = new ModifyWorldActionHandler();
-        public SymBlock LastPlacedBlock;
+        public SymetricBlock LastPlacedBlock;
+
+        private SpaceStation _spaceStation;
 
         private ADWPlaceModeModul _dialogWindow;
 
-        public BuildSubModePlace(BlockChecker checkerToBuildOn){
+        public BlockChecker NextChecker = null;
+
+        public BuildSubModePlace(BlockChecker checkerToBuildOn, SpaceStation spaceStation) {
             _checkerToBuildOn = checkerToBuildOn;
+            _spaceStation = spaceStation;
         }
 
-        public event EventHandler<Settings.Blocks_types> PlaceEvent;
-        /* public event EventHandler<Settings.Blocks_types> PlaceEvent;
-         public event EventHandler<bool> PlaceValidEvent;*/
-
-        public void PlaceBlock(Settings.Blocks_types blockTypeToPlace)
-        {
-            if (!Settings.isBuildMode) return;
+        public void PlaceBlock(Settings.Blocks_types blockTypeToPlace) {
 
             // Vytvoření bloku
-            var addBlockModAction = new AddBlockToWorldAction(WorldBuilderManager.World, _checkerToBuildOn, blockTypeToPlace);
+            var addBlockModAction = new AddBlockToWorldAction(_spaceStation, _checkerToBuildOn, blockTypeToPlace);
             addBlockModAction.ModifyTheWorld();
             this.LastPlacedBlock = addBlockModAction.LastPlacedBlock;
 
             // Kontrola, jestli je placement ok
             bool isPlaceValid = LastPlacedBlock.CheckBlockPlacement();
-            
+
             if (isPlaceValid)
                 this.OnBlockPlacementValid();
             else
-                this.OnPlacementInValid();
+                this.OnPlacementInvalid();
         }
-
-       /* public virtual void OnPlace(Settings.Blocks_types e) {
-           // this.PlaceEvent?.Invoke(this, e);
-        }*/
 
         private void OnBlockPlacementValid() {
             if (LastPlacedBlock == null)
@@ -52,59 +49,121 @@ namespace Assets.Scripts.GameCore.GameModes
                 UI.BlockBuildGizmosState(true, LastPlacedBlock);
 
             UI.BlockLibraryWindowState(false);
-           
+
+            // player dialog window y/n
+
+            _dialogWindow = new ADWPlaceModeModul(ModifyWorldActionHandler, LastPlacedBlock.BlockPosition);
 
             ScreenUIManager.Instance.AskDialogWindowController.SetWindowModul(_dialogWindow);
-            _dialogWindow.Bind(LastPlacedBlock);
+            _dialogWindow.PlayerAccepted += OnPlayerAccept;
+            _dialogWindow.PlayerRejected += OnPlayerReject;
             _dialogWindow.OnWindowOn();
 
 
             LastPlacedBlock.BlocksMainGraphics.gameObject.SetActive(true);
         }
-        private void OnPlacementInValid() {
-            if (LastPlacedBlock == null)
-                Debug.Log("lastPlacedBlock je null!!!!! to by se němělo stávat!!!");
+
+        public void SetBuildTimer() {
+
+            var blockContainerPos = LastPlacedBlock.BlockContainer.transform.position;
+
+            // get timer from pool
+            var UIBuildTimerObject = ScreenUIManager.Instance.UIPoolList.GetFromPool(
+                Settings.PoolTypes.UI_TIMER,
+                new Vector3(blockContainerPos.x, blockContainerPos.y + Settings.timerHeight, blockContainerPos.z),
+                Quaternion.identity, ScreenUIManager.Instance.timersHolder);
+
+            // set time
+            UIBuildTimerObject.GetComponent<BuildTimerController>().SetData(LastPlacedBlock.TimeToBuild);
+
+            RunBuildTimer(new WaitForSeconds(LastPlacedBlock.TimeToBuild), UIBuildTimerObject, LastPlacedBlock);
+        }
+
+        private void RunBuildTimer(WaitForSeconds buildTime, GameObject timerUIObj, SymetricBlock block) {
+            World.Instance.StartCoroutine(BuildCoroutinesLib.BuildCoroutine(buildTime, timerUIObj, block));
+        }
+
+        private void OnPlayerAccept(object sender, EventArgs args) {
+
+            _dialogWindow.OnWindowOff();
+
+            BlockLibrary.AddBlockToBlocksLib(LastPlacedBlock);
+
+            LastPlacedBlock.isBlockPlaced = true;
+
+            LastPlacedBlock.UpdateNeighboursActivityOnBuild();
+
+            LastPlacedBlock.BaseCheckerNextTo?.ResetCheckerMaterial();
+
+            // grid
+            LastPlacedBlock.BlockGrid?.SetGridOrientation();
+
+            UI.BlockBuildGizmosState(false);
+
+            SetBuildTimer();
+
+            // Nastavíme AUTOMATICKÝ SWTITCH CHECKERU NA DALŠÍ
+            if (Settings.switchCheckers && LastPlacedBlock.Checkers.Count > 1)
+                SwitchFocusToAnotherChecker();
+            else
+                GameModesManager.Instance.subModesHandler.StopCurrentSubMode(typeof(BuildSubModePlace));
+
+        }
+
+        private void SwitchFocusToAnotherChecker() {
+            var nextCheckerFinder = new NextCheckerForBuildFinder(LastPlacedBlock);
+            var nextCheckerToBuildOn = nextCheckerFinder.GetNextCheckerToBuild();
+
+            if(nextCheckerToBuildOn == null)
+                Debug.LogError("V WorldBuilder.cs nebyl nalezen další checker ke stavbě ");
+
+            NextChecker = nextCheckerToBuildOn;
+        }
+
+        private void OnPlayerReject(object sender, EventArgs args) {
+
+            // Zavře se Y/N dialogové okno
+            _dialogWindow.OnWindowOff();
+
+            // Odstraní blok
+            ModifyWorldActionHandler.ModifyWorld(new RemoveBlockFromTheWorldAction(LastPlacedBlock));
+
+            // UI
+            UI.BlockLibraryWindowState(true, LastPlacedBlock.BaseCheckerNextTo.checkerType);
+
+            // zavřeme gizmos
+            UI.BlockBuildGizmosState(false);
+        }
+
+        private void OnPlacementInvalid() {
 
             UI.GameScreenEvents(Settings.GameScreenEvents.NOT_ABLE_TO);
             ModifyWorldActionHandler.ModifyWorld(new RemoveBlockFromTheWorldAction(LastPlacedBlock));
         }
 
 
-        public void RotateBlockBeforePlace(SymBlock blockToRotate, Vector3 rotateAngleToAdd) {
-            if (Settings.isBuildMode)
-                ModifyWorldActionHandler.ModifyWorld(new RotateBlockAction(blockToRotate, rotateAngleToAdd));
+        public void RotateBlockBeforePlace(SymetricBlock blockToRotate, Vector3 rotateAngleToAdd) {
+            ModifyWorldActionHandler.ModifyWorld(new RotateBlockAction(blockToRotate, rotateAngleToAdd));
         }
 
-        public void TurnModeOn()
-        {
-            Settings.isPlacingBlock = true;
+        public void TurnModeOn() {
 
-            // vypneme knihovnu bloků
-            UI.BlockLibraryWindowState(false); // Proč?? Nechceme vidět load knihovny (v případěm že by karet bylo víc tak by to mohlo bugovat a to by bylo zlé... )
+            // Make sure library is off
+            UI.BlockLibraryWindowState(false);
 
-            if (_checkerToBuildOn != null)
-            {
-                // Nastavíme kameru
-                Manager.Instance.cameraController.SetTarget(_checkerToBuildOn.CheckerTransform);
+            //Set camera
+            Manager.Instance.cameraController.SetTarget(_checkerToBuildOn.CheckerTransform);
 
-                // Změna scény při kliknutí na checker - zvuk/zvýraznění
-                _checkerToBuildOn.checkers_graphics.sharedMaterial = Helpers.GameHighlights(Settings.GameHighlights.CHECKER, _checkerToBuildOn.checkers_graphics);
+            _checkerToBuildOn.checkers_graphics.sharedMaterial = Helpers.GameHighlights(Settings.GameHighlights.CHECKER, _checkerToBuildOn.checkers_graphics);
 
-                // Otevřeme UI Knihovnu bloků (v hře)
-                UI.BlockLibraryWindowState(true, _checkerToBuildOn.checkerType); // Pošleme pouze typ posledního bloku
+            // UI blocks library on with coresponding last block 
+            UI.BlockLibraryWindowState(true, _checkerToBuildOn.checkerType);
 
-                // Barevný grid podkladu
-                BlockLibrary.blocksLib.ForEach(b => b.BlockGrid?.SetGridActive(true));
-            }
-
-            _dialogWindow = new ADWPlaceModeModul(ModifyWorldActionHandler);
+            // Set block grid on
+            BlockLibrary.blocksLib.ForEach(b => b.BlockGrid?.SetGridActive(true));
         }
 
-        public void TurnModeOff()
-        {
-            Settings.isCamera = true;
-
-            Settings.isPlacingBlock = false;
+        public void TurnModeOff() {
 
             // Musí se povolit kamera
             Manager.Instance.cameraController.ResetTarget();
@@ -114,24 +173,29 @@ namespace Assets.Scripts.GameCore.GameModes
 
             // Zavřeme Y/N dialog
             ScreenUIManager.Instance.AskDialogWindowController.gameObject.SetActive(false);
-         //   ScreenUIManager.Instance.AskDialogWindowController.OnWindowOff();
 
-            UI.BlockBuildGizmosState(false); // (a gizmos)
+            UI.BlockBuildGizmosState(false);
 
             // Na kontroléru nastavíme zpět materiál
             _checkerToBuildOn.ResetCheckerMaterial();
 
-            if (LastPlacedBlock != null)
-                if (!LastPlacedBlock.isBlockPlaced)
-                        this.RestorePlace();   // Odstraníme poslední nedokončený blok   
+            this.RestorePlace();
+
+            if(_dialogWindow != null) {
+                _dialogWindow.PlayerAccepted -= OnPlayerAccept;
+                _dialogWindow.PlayerRejected -= OnPlayerReject;
+            }
         }
 
         private void RestorePlace() {
+            if (LastPlacedBlock == null || LastPlacedBlock.isBlockPlaced)
+                return;
+
             if (LastPlacedBlock.BlockContainer == null || LastPlacedBlock.BlockType == Settings.Blocks_types.CITY_HALL)
                 return;
 
-                MonoBehaviour.Destroy(LastPlacedBlock.BlockContainer);
-                LastPlacedBlock = null;
+            MonoBehaviour.Destroy(LastPlacedBlock.BlockContainer);
+            LastPlacedBlock = null;
         }
     }
 }

@@ -11,11 +11,11 @@ namespace Assets.Scripts.GameCore.BlockScripts.BlockAdditional
 
      // např. jestli blok nezasahuje do jiného apod. 
     public class BlockPlacementValidator {
-        private SymBlock _block;
+        private SymetricBlock _block;
         private Vector3 _currentBlockRotation;
         public bool isPlacementValid;
 
-        public BlockPlacementValidator(SymBlock block, Vector3 currentBlockRotation)
+        public BlockPlacementValidator(SymetricBlock block, Vector3 currentBlockRotation)
         {
             _block = block;
             _currentBlockRotation = currentBlockRotation;
@@ -49,10 +49,10 @@ namespace Assets.Scripts.GameCore.BlockScripts.BlockAdditional
 
             // Získáme veškeré bloky v blízkosti 
             float searchRadius = _block.symConstant * 2f + Settings.largestSymConstant + Mathf.Sqrt(2 * Mathf.Pow(Settings.largestSymConstant, 2)) + 1f; // + 1f Pro případ v rozých čtverce(opsanýpoloměr čtverci) => pythagoras(square root) ...
-            List<SymBlock> all_blocks_near = Helpers.GetAllBlocksInRadius(_block, searchRadius);
+            List<SymetricBlock> all_blocks_near = Helpers.GetAllBlocksInRadius(_block, searchRadius);
 
             int[] common_checkers_ctr = new int[_block.Checkers.Count];
-            foreach (SymBlock b_around in all_blocks_near) // TODO: Mohlo by být efektivnější s využitím znalosti rotace(tzn. get Objet rotation)
+            foreach (SymetricBlock b_around in all_blocks_near) // TODO: Mohlo by být efektivnější s využitím znalosti rotace(tzn. get Objet rotation)
             {
 
                 // AABB bloku 

@@ -8,7 +8,7 @@ using Assets.Scripts.GameCore.WorldBuilding.BlockLibrary;
 using System.Linq;
 using Assets.Scripts.GameCore.PathFinding;
 
-public class SymBlock : IBlock, ISymetricBlock
+public class SymetricBlock : IBlock, ISymetricBlock
 {
     // Je blok placnut - tzn. je pobuildu, ale ještě není blok postavený => roboti, kteří blok vystaví
     public bool isBlockPlaced = false;
@@ -99,10 +99,11 @@ public class SymBlock : IBlock, ISymetricBlock
 
 
     //public Block() : this(new Vector3().normalized, Quaternion.identity){}
-    public SymBlock(Vector3 blockPosition = new Vector3(), Vector3 rotation = new Vector3(), BlockSO blockData = null, BlockChecker activeChecker = null)
+    public SymetricBlock(Vector3 blockPosition = new Vector3(), Vector3 rotation = new Vector3(), BlockSO blockData = null, BlockChecker activeChecker = null)
     {
         if (blockData != null){
             // Věci z SO
+            #region set Blocks SO data
             this.BlockName = blockData.block_name;
             this.levelOfDetail = blockData.levelOfDetails;
             this.numOfPorts = blockData.mainNumberOfSlots;
@@ -118,6 +119,7 @@ public class SymBlock : IBlock, ISymetricBlock
             this.air = blockData.air;
             this.isNode = blockData.isNode;
             this.canRotate = blockData.canRotate;
+            #endregion set Blocks data
 
             // Pouze pokud se délky rovnají !!!
             if (blockData.checkersPositions.Length == blockData.checkersTypes.Length){
@@ -142,7 +144,7 @@ public class SymBlock : IBlock, ISymetricBlock
     {
         bool constructionState = false;
 
-        if (!(blockConstructor is SymBlockConstructor))
+        if (!(blockConstructor is SymetricBlockConstructor))
             return false;
 
         // Block Objekt
@@ -162,7 +164,7 @@ public class SymBlock : IBlock, ISymetricBlock
     }
 
     public bool ConstructBlockPost(IBlockConstructor blockConstructor) {
-        if (!(blockConstructor is SymBlockConstructor))
+        if (!(blockConstructor is SymetricBlockConstructor))
             return false;
 
         bool constructionState = false;
@@ -202,9 +204,9 @@ public class SymBlock : IBlock, ISymetricBlock
         }
     }
 
-    public List<SymBlock> GetBlocksInNeighbour(){
+    public List<SymetricBlock> GetBlocksInNeighbour(){
 
-        var neighbour_blocks = new List<SymBlock>();
+        var neighbour_blocks = new List<SymetricBlock>();
 
         foreach (BlockChecker c in Checkers){
             neighbour_blocks.Add(Helpers.GetBlock(c.checkerNextTo.checkers_container.position));
@@ -278,10 +280,10 @@ public class SymBlock : IBlock, ISymetricBlock
     #region FINALIZACE BUILDU
     /// <summary> Ukládáno jako soused kontroléru. </summary>
     public void UpdateNeighboursActivityOnBuild() {
-        float searchRadius = this.symConstant * 2f + Settings.largestSymConstant + Mathf.Sqrt(2 * Mathf.Pow(Settings.largestSymConstant, 2)) + 1f; 
+        float searchRadius = this.symConstant * 2f + Settings.largestSymConstant + Mathf.Sqrt(2 * Mathf.Pow(Settings.largestSymConstant, 2)) + 1f;
 
-        List<SymBlock> allCloseBlocks = Helpers.GetAllBlocksInRadius(this, searchRadius);
-        foreach (SymBlock b_around in allCloseBlocks) {
+        List<SymetricBlock> allCloseBlocks = Helpers.GetAllBlocksInRadius(this, searchRadius);
+        foreach (SymetricBlock b_around in allCloseBlocks) {
 
             b_around.Checkers.ForEach((otherBlocksChecker) =>
             {
@@ -290,18 +292,18 @@ public class SymBlock : IBlock, ISymetricBlock
                   if (otherBlocksChecker.CheckerTransform.transform.position == blockChecker.CheckerTransform.transform.position)
                       if (otherBlocksChecker.checkerType == blockChecker.checkerType)
                           if (blockChecker.checkerNextTo == null)// Pokud ještě souseda nemá
-                        {
+                          {
 
-                            // Přiřadíme souseda základnímu kontroléru
-                            blockChecker.checkerNextTo = otherBlocksChecker;
-                              blockChecker.isEmpty = false;
-                              blockChecker.UpdateCheckerActiveState();
-                              blockChecker.CreateCheckerGameObjectName();
+                                // Přiřadíme souseda základnímu kontroléru
+                                blockChecker.checkerNextTo = otherBlocksChecker;
+                                blockChecker.isEmpty = false;
+                                blockChecker.UpdateCheckerActiveState();
+                                blockChecker.CreateCheckerGameObjectName();
 
-                              otherBlocksChecker.checkerNextTo = blockChecker;
-                              otherBlocksChecker.isEmpty = false;
-                              otherBlocksChecker.UpdateCheckerActiveState();
-                              otherBlocksChecker.CreateCheckerGameObjectName();
+                                otherBlocksChecker.checkerNextTo = blockChecker;
+                                otherBlocksChecker.isEmpty = false;
+                                otherBlocksChecker.UpdateCheckerActiveState();
+                                otherBlocksChecker.CreateCheckerGameObjectName();
                           }
 
               });

@@ -8,7 +8,7 @@ namespace Assets.Scripts.GameCore.PeopleSystems
     {
         public static List<Person> AllPeople;
 
-        public SymBlock MaternityBlock;
+        public SymetricBlock MaternityBlock;
 
         public IPersonCreator PersonCreator = new RandomPersonFromPoolSelector();
 

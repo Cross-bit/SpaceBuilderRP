@@ -6,10 +6,9 @@ namespace Assets.Scripts.GameCore.InteractionsInGame.InteractionsWithBuildings
     {
         public RaycastHit HitData { get; private set; }
 
-        public SymBlock LastInteractedBlock { get; protected set; } // Blok(budova) se kterým interagujeme
+        public SymetricBlock LastInteractedBlock { get; protected set; } // Blok(budova) se kterým interagujeme
 
-        public BaseBuildingInteraction(RaycastHit hitData)
-        {
+        public BaseBuildingInteraction(RaycastHit hitData) {
             this.HitData = hitData;
 
             SetLastBlockPlayerInteractedWith();

@@ -5,10 +5,10 @@ namespace Assets.Scripts.GameCore.WorldBuilding.ModifyWorld
 {
     public class RotateBlockAction : IModifyWorldAction
     {
-        private SymBlock _blockToRotate;
+        private SymetricBlock _blockToRotate;
         private Vector3 _angleToAdd;
 
-        public RotateBlockAction(SymBlock blockToRotate, Vector3 angleToAdd) {
+        public RotateBlockAction(SymetricBlock blockToRotate, Vector3 angleToAdd) {
             _blockToRotate = blockToRotate;
             _angleToAdd = angleToAdd;
         }

@@ -93,8 +93,7 @@ public class BuildTimerController : MonoBehaviour, IUtility
             timerTransform.position = positionOnScreen; // Jinak to zobrazuje UI i po 180 rotaci kamery, což skutečně nechceme
     }
 
-    void UpdateText()
-    {
+    void UpdateText() {
         timerText.text = minutes + ":" + seconds;
     }
 }

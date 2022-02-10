@@ -5,18 +5,14 @@ namespace Assets.Scripts.GameCore.WorldBuilding.ModifyWorld
     // TODO: 
     public class RemoveBlockFromTheWorldAction : IModifyWorldAction
     {
-        private readonly SymBlock _blockToRemove;
+        private readonly SymetricBlock _blockToRemove;
 
-        public RemoveBlockFromTheWorldAction(SymBlock blockToRemove){
+        public RemoveBlockFromTheWorldAction(SymetricBlock blockToRemove){
             this._blockToRemove = blockToRemove;
         }
 
 
-        public void ModifyTheWorld()
-        {
-            if(!Settings.isBuildMode)
-                WorldBuilderManager.Instance.TurnBuildModeOn(); // resetuje se buildmode
-
+        public void ModifyTheWorld() {
             DestroyBlock();
         }
 

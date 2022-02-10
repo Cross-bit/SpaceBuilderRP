@@ -8,11 +8,11 @@ using UnityEngine;
 
 namespace Assets.Scripts.GameCore.WorldBuilding.AdditionalForBuild
 {
-    class NextCheckerForBuildGetter
+    class NextCheckerForBuildFinder
     {
-        private SymBlock _blockToFindOn;
+        private SymetricBlock _blockToFindOn;
 
-        public NextCheckerForBuildGetter(SymBlock blockToFindOn) {
+        public NextCheckerForBuildFinder(SymetricBlock blockToFindOn) {
             _blockToFindOn = blockToFindOn;
         }
 

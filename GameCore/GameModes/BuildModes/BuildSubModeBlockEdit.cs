@@ -7,15 +7,14 @@ namespace Assets.Scripts.GameCore.GameModes
     {
         private readonly ModifyWorldActionHandler modifyWorldActionHandler = new ModifyWorldActionHandler();
 
-        public void RotateBlock(SymBlock blockToRotate, Vector3 rotateAngleToAdd)
+        public void RotateBlock(SymetricBlock blockToRotate, Vector3 rotateAngleToAdd)
         {
-            if (Settings.isBuildMode)
+            //if (Settings.isBuildMode)
                 this.modifyWorldActionHandler.ModifyWorld(new RotateBlockAction(blockToRotate, rotateAngleToAdd));
         }
 
 
-        public void TurnModeOn()
-        {
+        public void TurnModeOn() {
             // Todo
         }
 

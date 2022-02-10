@@ -13,11 +13,11 @@ namespace Assets.Scripts.GameCore.BlockScripts.BlockAdditional.BlockFactory
     {
         // Symetrický blok
         public static IBlock CreateSymBlock(Vector3 position, Vector3 rotation, BlockSO BlockData, BlockChecker baseChecker) {
-            return new SymBlock(position, rotation, BlockData, baseChecker);
+            return new SymetricBlock(position, rotation, BlockData, baseChecker);
         }
 
-        public static SymBlockConstructor BlockConstructor(SymBlock newBlock) {
-            return new SymBlockConstructor(newBlock);
+        public static SymetricBlockConstructor BlockConstructor(SymetricBlock newBlock) {
+            return new SymetricBlockConstructor(newBlock);
         }
 
 

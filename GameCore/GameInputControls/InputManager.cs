@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.GameCore.GameControls;
 using Assets.Scripts.GameCore.GameControls.Controllers;
+using System;
 
 public class InputManager : SingletonPersistant<InputManager>
 {
@@ -9,9 +10,9 @@ public class InputManager : SingletonPersistant<InputManager>
     public ICameraInputControls CamInputs { get; private set; }
     public IGeneralInputControls GeneralInputs { get; private set; }
 
-    public WorldInteractionsControls WBMInputs { get; set; }
+    public PlayerInteractionsControls PlayerActionInputs { get; set; }
 
-    private List<IControlsInput> inputControls = new List<IControlsInput>();
+    public Dictionary<Type, IControlsInput> InputControls { get; private set; } = new Dictionary<Type, IControlsInput>();
 
     private void OnEnable()
     {
@@ -29,21 +30,24 @@ public class InputManager : SingletonPersistant<InputManager>
         if (this.inputMaster == null)
             return;
 
-        this.CamInputs?.UnRegisterInputs(this.inputMaster);
-        this.GeneralInputs?.UnRegisterInputs(this.inputMaster);
-        this.WBMInputs?.UnRegisterInputs(this.inputMaster);
+        this.CamInputs?.UnregisterInputs(this.inputMaster);
+        this.GeneralInputs?.UnregisterInputs(this.inputMaster);
+        this.PlayerActionInputs?.UnregisterInputs(this.inputMaster);
         inputMaster.Disable();
     }
 
     private void InitalizeControllers() {
-        this.CamInputs = new CameraInputControls();
-        inputControls.Add(this.CamInputs);
-        this.GeneralInputs = new GeneralInputControls();
-        inputControls.Add(this.GeneralInputs);
-        this.WBMInputs = new WorldInteractionsControls();
-        inputControls.Add(this.WBMInputs);
 
-        foreach (var controls in this.inputControls)
+        this.CamInputs = new CameraInputControls();
+        InputControls.Add(typeof(CameraInputControls), this.CamInputs);
+
+        this.GeneralInputs = new GeneralInputControls();
+        InputControls.Add(typeof(GeneralInputControls), this.GeneralInputs);
+
+        this.PlayerActionInputs = new PlayerInteractionsControls();
+        InputControls.Add(typeof(PlayerInteractionsControls), this.PlayerActionInputs);
+
+        foreach (var controls in this.InputControls.Values)
             controls.RegisterInputs(this.inputMaster);
     }
 }

@@ -100,7 +100,11 @@ public static class UI
 
                                     // Přidáme click funkci tlačítku
                                     Button cart_btn = b_cart.CartGraphics.GetComponent<Button>();
-                                    cart_btn.onClick.AddListener(() => b_cart.LoadBlockBuild());
+
+                                    
+                                    cart_btn.onClick.AddListener(() => World.Instance.PlaceBlockInWorld(b_cart.BlockType));
+                                    cart_btn.onClick.AddListener(() => Helpers.ReorganiseSuitableBlocks(b_cart.BlockData));
+                                    
                                 }
                                 else
                                 {
@@ -140,8 +144,7 @@ public static class UI
                             isLenghtSame = ScreenUIManager.Instance.allBuildCarts.Count >= suitableBlocks.Count ? true : false;
 
                             // Pokud je vše ok, tak přepisujeme:
-                            if (isLenghtSame)
-                            {
+                            if (isLenghtSame) {
                                 // Prostě projíždíme všechny karty, které vůbec existují(buď byly dodtaečně vytvořeny, nebo...)
                                 short ctr = 0; // => žádné omezení ctr
                                 foreach (BlockBuildCart b_cart in ScreenUIManager.Instance.allBuildCarts)
@@ -170,7 +173,9 @@ public static class UI
                                     b_cart.CheckerType = c_type;
 
                                     // Přidáme click funkci
-                                    cart_btn.onClick.AddListener(() => b_cart.LoadBlockBuild());
+                                    cart_btn.onClick.AddListener(() => World.Instance.PlaceBlockInWorld(b_cart.BlockType));
+                                    cart_btn.onClick.AddListener(() => Helpers.ReorganiseSuitableBlocks(b_cart.BlockData));
+
                                     //Přidáme zvuk
                                     AddButtonSound(cart_btn);
 
@@ -215,7 +220,7 @@ public static class UI
     }
 
     // -- 1. FOCUS tzn. statistiky bloku na který se kliklo
-    internal static void BlockDetailWindowState(bool state, SymBlock b_data = null)
+    internal static void BlockDetailWindowState(bool state, SymetricBlock b_data = null)
     {
         if (state)
         {
@@ -252,7 +257,7 @@ public static class UI
     }
 
     /// <summary> Gizmos při stavbě - šipky rotace apod. </summary> <param name="b_pos"></param> <param name="state"></param>
-    internal static void BlockBuildGizmosState(bool state, SymBlock b_data = null)
+    internal static void BlockBuildGizmosState(bool state, SymetricBlock b_data = null)
     {
         if (state)
         {
@@ -311,14 +316,12 @@ public static class UI
         // show grid
        // ScreenUIHolder.Instance.leftPanel.enableGrid.onValueChanged.AddListener(delegate { GizmosInGame.SetGridGame(); });
 
-        // Tlačítko zapnutí build-modu
-        ScreenUIManager.Instance.bottomPanel.buildModeOn.onClick.AddListener(delegate { WorldBuilderManager.Instance.TurnBuildModeOn(); });
-        //  ScreenUIHolder.Instance.leftPanel.destroyBlockBtn
+        // Tlačítko zapnutí build-modu TODO:
+        //ScreenUIManager.Instance.bottomPanel.buildModeOn.onClick.AddListener(() => World.Instance.TurnBuildModeOn());
     }
 
    
-    internal static void ScreenStaticLeftPanelState(bool state = false)
-    {
+    internal static void ScreenStaticLeftPanelState(bool state = false) {
        
         /*if (state)
         {

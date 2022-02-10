@@ -12,7 +12,7 @@ public interface IAskDialogueWindowController
     Vector3 PositionToDrawOn { get; set; }
     Button RejectBtn { get; set; }
 
-    void OnFalse<T>();
+    void OnFalse<T>(); // what client chooses
     void OnTrue();
     void OnWindowOff();
     void OnWindowOn();

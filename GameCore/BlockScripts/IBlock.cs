@@ -28,5 +28,5 @@ public interface IBlock
     void AddToPathFinding();
     void BuildBlock();
     void ActivateBlock();
-    List<SymBlock> GetBlocksInNeighbour();
+    List<SymetricBlock> GetBlocksInNeighbour();
 }

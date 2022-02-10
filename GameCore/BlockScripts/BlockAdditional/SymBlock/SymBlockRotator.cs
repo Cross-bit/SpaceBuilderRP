@@ -6,24 +6,23 @@ using System;
 
 namespace Assets.Scripts.BlockScripts.BlockAdditional
 {
-    public class SymBlockRotator
-    {
-        private readonly SymBlock _blockToRotate;
+    public class SymBlockRotator {
+
+        private readonly SymetricBlock _blockToRotate;
         private readonly Quaternion _rotateForAngle;
 
-        public SymBlockRotator(Quaternion rotateForAngle, SymBlock blockToRotate) {
+        public SymBlockRotator(Quaternion rotateForAngle, SymetricBlock blockToRotate) {
             _rotateForAngle = rotateForAngle;
             _blockToRotate = blockToRotate;
         }
 
-        public void RotateOnBuild()
-        {
+        public void RotateOnBuild() {
             RotateBlockGameObjectToGivenAngle(_blockToRotate.BlockRotation);
             RotateBlockCheckersForGivenAngle(_blockToRotate.BlockRotation);
         }
 
-        public void RotateBlockForCertainAngle()
-        {
+        public void RotateBlockForCertainAngle() {
+
             var newBlockRotation = _blockToRotate.BlockRotation + _rotateForAngle.eulerAngles;
 
             //Nastaví rotaci
@@ -60,9 +59,8 @@ namespace Assets.Scripts.BlockScripts.BlockAdditional
             }
         }
 
-
         public static int FindFirstPossibleAngleToRotateSymetricBlockTo(Func<int, bool> checkTheOrientationIsValidOn, int angle = 0) {
-            if (angle > 270) // Před celou otočkou
+            if (angle > 270) // Přes celou otočkou
                 return angle;
 
             bool isValid = checkTheOrientationIsValidOn(angle);

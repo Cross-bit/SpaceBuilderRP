@@ -27,7 +27,7 @@ namespace Assets.Scripts.GameCore.BlockScripts.GenericBlock
         public bool IsOrientationValid { get; set; }
         public float TimeToBuild { get; set; }
 
-        public List<SymBlock> GetBlocksInNeighbour() {
+        public List<SymetricBlock> GetBlocksInNeighbour() {
             return null;
         }
 

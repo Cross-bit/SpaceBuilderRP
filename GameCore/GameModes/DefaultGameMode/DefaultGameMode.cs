@@ -8,13 +8,11 @@ namespace Assets.Scripts.GameCore.GameModes
 {
     public class DefaultGameMode : IGameMode
     {
-        public void TurnModeOn()
-        {
+        public void TurnModeOn() {
           // Co se stane při inicializaci defaul hry
         }
 
-        public void TurnModeOff()
-        {
+        public void TurnModeOff() {
           //  throw new NotImplementedException();
         }
 

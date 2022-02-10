@@ -11,13 +11,9 @@ namespace Assets.Scripts.GameCore.GameModes
 
     public class BuildMode : IGameMode
     {
-        public void TurnModeOn()
-        {
+        public void TurnModeOn() {
+
             if (!Settings.isGameLoaded) return;
-
-            if (Settings.isBuildMode) return;
-
-            Settings.isBuildMode = true;
 
             // Screen highlight
             UI.ScreenHighlightState(true, Settings.ScreenHighlights.BUILD); // Zapneme highlight
@@ -26,13 +22,9 @@ namespace Assets.Scripts.GameCore.GameModes
             BlockLibrary.blocksLib.ForEach(b => b.BlockGrid?.SetGridActive(true));
 
             UI.BuildModeElementsState(true);
-
         }
 
-        public void TurnModeOff()
-        {
-            // Vypneme buildmode
-            Settings.isBuildMode = false;
+        public void TurnModeOff() {
 
             // Musí se povolit kamera
             Manager.Instance.cameraController.ResetTarget();
@@ -48,6 +40,5 @@ namespace Assets.Scripts.GameCore.GameModes
 
             BlockLibrary.blocksLib.ForEach(b => b.BlockGrid?.SetGridActive(false));
         }
-
     }
 }

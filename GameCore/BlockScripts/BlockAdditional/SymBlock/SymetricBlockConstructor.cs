@@ -2,14 +2,14 @@
 
 namespace Assets.Scripts.BlockScripts.BlockAdditional
 {
-    public class SymBlockConstructor : IBlockConstructor
+    public class SymetricBlockConstructor : IBlockConstructor
     {
         //public IBlock BlockToConstruct { get; private set; }
-        private SymBlock _blockToConstruct;
-        public IBlock BlockToConstruct { get => _blockToConstruct; set => _blockToConstruct = value as SymBlock; }
+        private SymetricBlock _blockToConstruct;
+        public IBlock BlockToConstruct { get => _blockToConstruct; set => _blockToConstruct = value as SymetricBlock; }
 
         //TODO: poslat i BlockSO a udělat čitelnější
-        public SymBlockConstructor(SymBlock blockToConstruct) {
+        public SymetricBlockConstructor(SymetricBlock blockToConstruct) {
             _blockToConstruct = blockToConstruct;
         }
 
@@ -17,7 +17,7 @@ namespace Assets.Scripts.BlockScripts.BlockAdditional
         public void CreateBlockContainer () {
             // Generace bloku - pod nový parent 
             _blockToConstruct.BlockContainer = new GameObject(_blockToConstruct.BlockName);
-            _blockToConstruct.BlockContainer.transform.parent = WorldBuilderManager.Instance.gameObject.transform;
+            _blockToConstruct.BlockContainer.transform.parent = World.Instance.gameObject.transform;
         }
 
         public void CreateBlockGraphicsGameObject()
@@ -84,8 +84,7 @@ namespace Assets.Scripts.BlockScripts.BlockAdditional
                 }
                 else
                 {
-                    if (_blockToConstruct.BaseCheckerNextTo != null)
-                    {
+                    if (_blockToConstruct.BaseCheckerNextTo != null) {
                         _blockToConstruct.Checkers.Add(new BlockChecker(_blockToConstruct.CheckersPosition[i], _blockToConstruct.CheckersContainer.transform, _blockToConstruct.BlockName,
                         _blockToConstruct.BaseCheckerNextTo.checkerType, true));
                     }
@@ -128,10 +127,8 @@ namespace Assets.Scripts.BlockScripts.BlockAdditional
             }
         }
 
-        private void SetBlocksCheckersMaterial()
-        {
-            for (int i = 0; i < _blockToConstruct.Checkers.Count; i++)
-            {
+        private void SetBlocksCheckersMaterial() {
+            for (int i = 0; i < _blockToConstruct.Checkers.Count; i++) {
                 _blockToConstruct.Checkers[i].SetCheckerMaterial();
             }
         }

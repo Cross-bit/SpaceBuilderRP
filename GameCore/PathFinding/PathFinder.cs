@@ -73,7 +73,7 @@ public class PathFinder : Singleton<PathFinder>
     {
         nodes_data = new List<Node>();
 
-        foreach (SymBlock b in BlockLibrary.blocksLib)
+        foreach (SymetricBlock b in BlockLibrary.blocksLib)
         {
             if (b.IsNode)
             {
@@ -96,7 +96,7 @@ public class PathFinder : Singleton<PathFinder>
         return nodes_data;
     }
 
-    public Dictionary<Vector3, float> FindBlockNeighbourNodes(SymBlock b_base)
+    public Dictionary<Vector3, float> FindBlockNeighbourNodes(SymetricBlock b_base)
     {
         Dictionary<Vector3, float> b_neighbour_nodes = new Dictionary<Vector3, float>();
 
@@ -105,9 +105,9 @@ public class PathFinder : Singleton<PathFinder>
             if (b_c.checkerNextTo == null)
                 continue;
 
-            Dictionary<SymBlock, float> b_potencionals = new Dictionary<SymBlock, float>();
+            Dictionary<SymetricBlock, float> b_potencionals = new Dictionary<SymetricBlock, float>();
 
-            SymBlock neighbour_b = IsNeighbourNode(b_c);
+            SymetricBlock neighbour_b = IsNeighbourNode(b_c);
             if (neighbour_b != null)
             {
                 float dist = Vector3.Distance(b_base.BlockContainer.transform.position, neighbour_b.BlockContainer.transform.position);
@@ -118,12 +118,12 @@ public class PathFinder : Singleton<PathFinder>
         return b_neighbour_nodes;
     }
 
-    public SymBlock IsNeighbourNode(BlockChecker current_c)
+    public SymetricBlock IsNeighbourNode(BlockChecker current_c)
     {
 
         if (current_c.checkerNextTo != null)
         {
-            SymBlock b_in_row = Helpers.GetBlock(current_c.checkerNextTo.checkers_container.position);
+            SymetricBlock b_in_row = Helpers.GetBlock(current_c.checkerNextTo.checkers_container.position);
             Vector3 dir_to_current_c = current_c.position.RotateOnY(-b_in_row.BlockRotation.y);
 
             if (b_in_row != null)

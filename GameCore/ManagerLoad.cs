@@ -22,12 +22,12 @@ namespace Assets.Scripts.ManagerLoad
         {
             bool loaded = false;
 
-            WorldBuilderManager worldBuiler = MonoBehaviour.FindObjectOfType<WorldBuilderManager>();
+            World worldBuiler = MonoBehaviour.FindObjectOfType<World>();
 
             if (worldBuiler == null)
             {
                 GameObject worldBuilder_obj = new GameObject("WorldBuilder");
-                worldBuiler = worldBuilder_obj.AddComponent<WorldBuilderManager>();
+                worldBuiler = worldBuilder_obj.AddComponent<World>();
                 Debug.LogError("WorlBuilder musel být vytvořen kódem!(Manager.cs) :-|");
             }
 
