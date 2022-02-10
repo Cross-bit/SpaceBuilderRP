@@ -15,6 +15,7 @@ namespace Assets.Scripts.GameCore.GameModes {
         public IGameState CurrentGameState;
 
         public BuildModeState BuildModeState { get; }
+
         public IdleModeState IdleModeState { get; }
 
         public GameModesManagerNew() {
